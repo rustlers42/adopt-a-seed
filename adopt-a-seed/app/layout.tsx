@@ -27,10 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-[family-name:var(--font-geist-sans)] antialiased`}
+        className={`flex flex-col h-full ${geistSans.variable} ${geistMono.variable} font-[family-name:var(--font-geist-sans)] antialiased`}
       >
         <Header />
-        <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+        <main className="flex flex-col flex-grow gap-4 pt-2 pb-2">
           {children}
         </main>
         <Footer />
