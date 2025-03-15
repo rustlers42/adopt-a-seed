@@ -1,4 +1,6 @@
 import { getPlantById } from "../../../lib/plant";
+import PlantDetails from "./PlantDetails";
+import PlantSurvey from "./PlantSurvey";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -11,10 +13,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <div>
       <h1>Plant Information</h1>
-      <p>ID: {plant.id}</p>
-      <p>Category: {plant.seed.category}</p>
-      <p>Specific: {plant.seed.specific}</p>
-      <p>Planted At: {plant.planted_at.toDateString()}</p>
+      <PlantDetails plant={plant} />
+      <PlantSurvey />
     </div>
   );
 }
