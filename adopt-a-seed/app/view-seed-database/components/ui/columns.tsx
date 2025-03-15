@@ -21,11 +21,11 @@ export const columns: ColumnDef<SeedDatabase>[] = [
     },
   },
   {
-    accessorKey: 'contact',
-    header: 'Email',
-  },
-  {
     accessorKey: 'seeds',
     header: 'Seed',
+  },
+  {
+    accessorKey: 'contact',
+    header: 'Email',
   },
 ];
