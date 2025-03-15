@@ -5,7 +5,7 @@ export default function Footer() {
         <div className="flex items-center">
           <div>
             <svg
-              className="ml-2 w-6 h-6 pr-2"
+              className="w-6 h-6 pr-2"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 512 512"
             >
