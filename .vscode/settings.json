@@ -8,5 +8,5 @@
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "python.defaultInterpreterPath": "./adopt-a-seed-backend/.venv"
+  "python.defaultInterpreterPath": "./adopt-a-seed-api/.venv"
 }
