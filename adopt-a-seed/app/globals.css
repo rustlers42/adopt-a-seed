@@ -121,7 +121,8 @@
     @apply bg-background text-foreground;
   }
   html,
-  body {
+  body,
+  main {
     height: 100%;
   }
 }
