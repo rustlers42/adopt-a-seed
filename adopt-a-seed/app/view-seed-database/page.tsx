@@ -4,7 +4,7 @@ import { columns, SeedDatabase } from './components/ui/columns';
 import { DataTable } from './components/ui/data-table';
 
 function getData(): SeedDatabase[] {
-  return [
+  const databases = [
     new SeedDatabase('Manhattan Seed Database', 'example@example.com', [
       'Siberian Tomato',
       'Yukon Gold Potato',
@@ -48,6 +48,12 @@ function getData(): SeedDatabase[] {
       'Common Sage',
     ]),
   ];
+
+  return databases.flatMap((database) =>
+    database.seeds.map(
+      (seed) => new SeedDatabase(database.name, database.contact, [seed])
+    )
+  );
 }
 
 export default function ViewSeedDatabasePage() {
