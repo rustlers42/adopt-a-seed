@@ -33,6 +33,7 @@ def create_db_and_tables():
 
     with Session(engine) as session:
         if session.exec(select(User)).first() is None:
+            logging.info("creating default users because there are none")
             user = [
                 User(
                     email="admin@admin.de",
@@ -44,13 +45,14 @@ def create_db_and_tables():
                     email="user@user.de",
                     username="user",
                     hashed_password=get_password_hash("user"),
-                    score=0,
+                    score=500,
                 ),
             ]
             session.add_all(user)
             session.commit()
 
         if session.exec(select(Seed)).first() is None:
+            logging.info("creating default seeds because there are none")
             seeds = [
                 Seed(category="Tomato", specific_name="Siberian Tomato"),
                 Seed(category="Tomato", specific_name="Cherry Tomato"),
@@ -95,6 +97,7 @@ def create_db_and_tables():
             session.commit()
 
         if session.exec(select(Plant)).first() is None:
+            logging.info("creating default plants because there are none")
             plants = [
                 Plant(seed_id=1, user_id=1, planted_at=date(2025, 1, 1).isoformat()),
                 Plant(seed_id=2, user_id=1, planted_at=date(2025, 1, 2).isoformat()),
@@ -106,6 +109,7 @@ def create_db_and_tables():
             session.commit()
 
         if session.exec(select(SeedDatabase)).first() is None:
+            logging.info("creating default seed databases because there are none")
             seed_databases = [
                 SeedDatabase(
                     name="Manhattan Seed Database", contact="example@example.com"
@@ -142,6 +146,9 @@ def create_db_and_tables():
             session.commit()
 
         if session.exec(select(SeedToSeedDatabase)).first() is None:
+            logging.info(
+                "creating default seed to seed database mapping because there are none"
+            )
             seed_to_seed_database_mapping = [
                 SeedToSeedDatabase(seed_id=1, seed_database_id=1),
                 SeedToSeedDatabase(seed_id=2, seed_database_id=1),
