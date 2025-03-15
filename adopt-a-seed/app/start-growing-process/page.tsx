@@ -2,36 +2,65 @@
 
 import { Combobox, ComboxOption } from '@/components/combobox';
 import { DatePicker } from '@/components/date-picker';
+import { Button } from '@/components/ui/button';
+import { getUniqueSeedDatabases, getUniqueSeeds } from '@/lib/seed-database';
+import { useState } from 'react';
+
+function makeComboboxOptionFromStringArray(arr: string[]): ComboxOption[] {
+  return arr.map((item) => ({
+    value: item.trim().toLowerCase().replaceAll(' ', '-'),
+    label: item,
+  }));
+}
 
 export default function StartGrowingProcessPage() {
-  const seeds: ComboxOption[] = [
-    { value: 'tomato', label: 'Tomato' },
-    { value: 'cucumber', label: 'Cucumber' },
-    { value: 'pepper', label: 'Pepper' },
-  ];
+  const seeds: ComboxOption[] =
+    makeComboboxOptionFromStringArray(getUniqueSeeds());
 
-  const seedDatabases: ComboxOption[] = [
-    { value: 'seed-db-1', label: 'Seed Database 1' },
-    { value: 'seed-db-2', label: 'Seed Database 2' },
-    { value: 'seed-db-3', label: 'Seed Database 3' },
-  ];
+  const seedDatabases: ComboxOption[] = makeComboboxOptionFromStringArray(
+    getUniqueSeedDatabases()
+  );
+
+  const [selectedSeed, setSelectedSeed] = useState<ComboxOption | null>(null);
+  const [selectedSeedDatabase, setSelectedSeedDatabase] =
+    useState<ComboxOption | null>(null);
+
+  const handleSeedChange = (seed: ComboxOption) => {
+    setSelectedSeed(seed);
+  };
+
+  const handleSeedDatabaseChange = (seedDatabase: ComboxOption) => {
+    setSelectedSeedDatabase(seedDatabase);
+  };
+
+  const [startDate, setStartDate] = useState<Date>(new Date());
+
+  const handleStartDateChange = (date: Date) => {
+    setStartDate(date);
+  };
 
   return (
     <>
-      <div className="mx-auto py-10">start growing process</div>
       <div>
         <div>seed</div>
-        <Combobox options={seeds} />
+        <Combobox options={seeds} onSelect={handleSeedChange} />
       </div>
 
       <div>
         <div>seed database</div>
-        <Combobox options={seedDatabases} />
+        <Combobox options={seedDatabases} onSelect={handleSeedDatabaseChange} />
       </div>
 
       <div>
         <div>start date</div>
-        <DatePicker />
+        <DatePicker
+          initialDate={startDate}
+          onDateChange={handleStartDateChange}
+        />
+      </div>
+
+      <div>
+        <Button variant="default">start growing</Button>
       </div>
     </>
   );
