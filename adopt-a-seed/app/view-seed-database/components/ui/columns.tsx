@@ -21,8 +21,14 @@ export const columns: ColumnDef<SeedDatabase>[] = [
     },
   },
   {
-    accessorKey: 'seeds',
-    header: 'Seed',
+    accessorFn: (row) => row.seeds[0].category,
+    id: 'seeds.category',
+    header: 'Category',
+  },
+  {
+    accessorFn: (row) => row.seeds[0].specific,
+    id: 'seeds.specific',
+    header: 'Specific',
   },
   {
     accessorKey: 'contact',
