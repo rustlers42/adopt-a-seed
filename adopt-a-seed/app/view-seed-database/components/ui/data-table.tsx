@@ -46,7 +46,9 @@ export function DataTable<TData, TValue>({
       globalFilter,
     },
     onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn: 'includesString',
+    getColumnCanGlobalFilter: (_) => {
+      return true;
+    },
   });
 
   return (
