@@ -120,9 +120,7 @@
   body {
     @apply bg-background text-foreground;
   }
-  html,
-  body,
-  main {
+  html {
     height: 100%;
   }
 }
