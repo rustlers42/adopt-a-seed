@@ -1,3 +1,10 @@
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
 import Link from "next/link";
 
 export default function Header() {
@@ -7,6 +14,21 @@ export default function Header() {
         <Link href="/">
           <h1 className="text-2xl font-bold">adopt-a-seed</h1>
         </Link>
+
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <Link href="/" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Home</NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/view-seed-database" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Seed Databases</NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
 
         <div className="flex items-center">
           <div className="ml-2">100</div>
