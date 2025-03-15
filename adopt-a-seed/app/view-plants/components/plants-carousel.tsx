@@ -13,7 +13,7 @@ interface PlantsCarouselProps {
 
 export function PlantsCarousel({ plants }: PlantsCarouselProps) {
   return (
-    <ScrollArea className="whitespace-nowrap overflow-auto">
+    <ScrollArea className="custom-scrollbar whitespace-nowrap overflow-auto">
       <div className="flex w-max space-x-4 p-4">
         <div className="shrink-0">
           <Link href="/start-growing-process">
