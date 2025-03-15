@@ -1,5 +1,9 @@
+"use client";
+
 import Link from "next/link";
-import { SproutIcon as Seedling } from "lucide-react";
+import { LogOut, SproutIcon as Seedling, User } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { useFetchApi } from "@/lib/use-api";
 
 import {
   NavigationMenu,
@@ -8,8 +12,25 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+
+type UserProfile = {
+  email: string;
+  username: string;
+  score: number;
+};
 
 export default function Header() {
+  const { isAuthenticated, user, logout } = useAuth();
+
+  // Only fetch user profile when authenticated
+  const { data: userProfile, isLoading } = useFetchApi<UserProfile>("http://localhost:8000/users/me", {
+    requireAuth: true,
+    // Skip the API call if not authenticated
+    enabled: isAuthenticated,
+  });
+
   return (
     <header className="border-b">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -33,9 +54,37 @@ export default function Header() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        <div className="flex items-center gap-2">
-          <span className="font-medium">100</span>
-          <Seedling className="h-5 w-5" aria-hidden="true" />
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            {isAuthenticated ? (
+              isLoading ? (
+                <Skeleton className="h-6 w-12" />
+              ) : (
+                <span className="font-medium">{userProfile?.score || 0}</span>
+              )
+            ) : (
+              <span className="font-medium">0</span>
+            )}
+            <Seedling className="h-5 w-5" aria-hidden="true" />
+          </div>
+
+          {isAuthenticated ? (
+            <div className="flex items-center gap-2">
+              <Link href="/profile" className="flex items-center gap-1 text-sm">
+                <User className="h-4 w-4" />
+                <span>{user?.username}</span>
+              </Link>
+              <Button variant="ghost" size="icon" onClick={logout} aria-label="Logout">
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </div>
+          ) : (
+            <Link href="/login">
+              <Button variant="outline" size="sm">
+                Login
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </header>
