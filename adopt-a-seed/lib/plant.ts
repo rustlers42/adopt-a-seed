@@ -19,3 +19,7 @@ export const getPlantsDummyData = [
   new Plant(7, getUniqueSeedsClass()[5], new Date()),
   new Plant(8, getUniqueSeedsClass()[3], new Date()),
 ];
+
+export function getPlantById(id: number): Plant | undefined {
+  return getPlantsDummyData.find((plant) => plant.id === id);
+}
