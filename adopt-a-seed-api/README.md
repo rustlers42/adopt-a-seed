@@ -1,14 +1,16 @@
-# start the backend
+# adopt-a-seed-api
+
+## start the backend
 
 ```bash
 uv run main.py
 ```
 
-# swagger
+## swagger
 
 http://127.0.0.1:8000/docs
 
-## setup some mock data
+### setup some mock data
 
 ```bash
 curl --location --request POST 'http://127.0.0.1:8000/seeds/fill'
