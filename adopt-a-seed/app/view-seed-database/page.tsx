@@ -1,6 +1,7 @@
 'use client';
 
-import { columns, SeedDatabase } from './components/ui/columns';
+import { SeedDatabase } from '@/lib/seed-database';
+import { columns } from './components/ui/columns';
 import { DataTable } from './components/ui/data-table';
 
 function getData(): SeedDatabase[] {

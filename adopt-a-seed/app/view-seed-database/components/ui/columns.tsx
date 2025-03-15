@@ -1,18 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { SeedDatabase } from '@/lib/seed-database';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export class SeedDatabase {
-  constructor(
-    public name: string,
-    public contact: string,
-    public seeds: string[]
-  ) {}
-}
 
 export const columns: ColumnDef<SeedDatabase>[] = [
   {
