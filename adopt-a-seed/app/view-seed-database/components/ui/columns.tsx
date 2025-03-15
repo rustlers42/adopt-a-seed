@@ -1,19 +1,16 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { SeedDatabase } from '@/lib/seed-database';
-import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { SeedDatabase } from "@/lib/seed-database";
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowUpDown } from "lucide-react";
 
 export const columns: ColumnDef<SeedDatabase>[] = [
   {
-    accessorKey: 'name',
+    accessorKey: "name",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
           Database
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
@@ -22,16 +19,16 @@ export const columns: ColumnDef<SeedDatabase>[] = [
   },
   {
     accessorFn: (row) => row.seeds[0].category,
-    id: 'seeds.category',
-    header: 'Category',
+    id: "seeds.category",
+    header: "Category",
   },
   {
     accessorFn: (row) => row.seeds[0].specific,
-    id: 'seeds.specific',
-    header: 'Specific',
+    id: "seeds.specific",
+    header: "Specific",
   },
   {
-    accessorKey: 'contact',
-    header: 'Email',
+    accessorKey: "contact",
+    header: "Email",
   },
 ];

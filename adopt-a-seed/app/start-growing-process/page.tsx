@@ -1,29 +1,25 @@
-'use client';
+"use client";
 
-import { Combobox, ComboxOption } from '@/components/combobox';
-import { DatePicker } from '@/components/date-picker';
-import { Button } from '@/components/ui/button';
-import { getUniqueSeedDatabases, getUniqueSeeds } from '@/lib/seed-database';
-import { useState } from 'react';
+import { Combobox, ComboxOption } from "@/components/combobox";
+import { DatePicker } from "@/components/date-picker";
+import { Button } from "@/components/ui/button";
+import { getUniqueSeedDatabases, getUniqueSeeds } from "@/lib/seed-database";
+import { useState } from "react";
 
 function makeComboboxOptionFromStringArray(arr: string[]): ComboxOption[] {
   return arr.map((item) => ({
-    value: item.trim().toLowerCase().replaceAll(' ', '-'),
+    value: item.trim().toLowerCase().replaceAll(" ", "-"),
     label: item,
   }));
 }
 
 export default function StartGrowingProcessPage() {
-  const seeds: ComboxOption[] =
-    makeComboboxOptionFromStringArray(getUniqueSeeds());
+  const seeds: ComboxOption[] = makeComboboxOptionFromStringArray(getUniqueSeeds());
 
-  const seedDatabases: ComboxOption[] = makeComboboxOptionFromStringArray(
-    getUniqueSeedDatabases()
-  );
+  const seedDatabases: ComboxOption[] = makeComboboxOptionFromStringArray(getUniqueSeedDatabases());
 
   const [selectedSeed, setSelectedSeed] = useState<ComboxOption | null>(null);
-  const [selectedSeedDatabase, setSelectedSeedDatabase] =
-    useState<ComboxOption | null>(null);
+  const [selectedSeedDatabase, setSelectedSeedDatabase] = useState<ComboxOption | null>(null);
 
   const handleSeedChange = (seed: ComboxOption) => {
     setSelectedSeed(seed);
@@ -53,10 +49,7 @@ export default function StartGrowingProcessPage() {
 
       <div>
         <div>start date</div>
-        <DatePicker
-          initialDate={startDate}
-          onDateChange={handleStartDateChange}
-        />
+        <DatePicker initialDate={startDate} onDateChange={handleStartDateChange} />
       </div>
 
       <div>

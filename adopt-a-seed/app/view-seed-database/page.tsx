@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { getSeedDatabaseDummyData } from '@/lib/seed-database';
-import { columns } from './components/ui/columns';
-import { DataTable } from './components/ui/data-table';
+import { getSeedDatabaseDummyData } from "@/lib/seed-database";
+import { columns } from "./components/ui/columns";
+import { DataTable } from "./components/ui/data-table";
 
 export default function ViewSeedDatabasePage() {
   const data = getSeedDatabaseDummyData();
