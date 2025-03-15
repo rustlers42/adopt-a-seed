@@ -66,3 +66,7 @@ export function getUniqueSeedDatabases(): string[] {
 export function getUniqueSeeds(): string[] {
   return Array.from(new Set(databases.flatMap((database) => database.seeds.map((seed) => seed.specific))));
 }
+
+export function getUniqueSeedsClass(): Seed[] {
+  return Array.from(new Set(databases.flatMap((database) => database.seeds)));
+}
