@@ -1,10 +1,9 @@
 from sqlmodel import Session, create_engine
 
-sqlite_file_name = "database.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
+from .settings import settings
 
 connect_args = {"check_same_thread": False}
-engine = create_engine(sqlite_url, echo=True, connect_args=connect_args)
+engine = create_engine(settings.database_url, connect_args=connect_args)  # echo=True
 
 
 def get_session():

@@ -8,9 +8,21 @@ dependencies = [
     "bcrypt>=4.3.0",
     "fastapi>=0.115.11",
     "passlib>=1.7.4",
+    "pydantic-settings>=2.8.1",
     "pydantic>=2.10.6",
     "pyjwt>=2.10.1",
     "python-multipart>=0.0.20",
     "sqlmodel>=0.0.24",
     "uvicorn>=0.34.0",
 ]
+
+[tool.uv]
+dev-dependencies = [
+    "black>=25.1.0",
+    "isort>=6.0.1",
+    "ruff>=0.11.0",
+]
+
+[tool.ruff]
+line-length = 120
+exclude = [".git", ".venv", "venv"]
