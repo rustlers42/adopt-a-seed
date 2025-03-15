@@ -24,9 +24,10 @@ export interface ComboxOption {
 
 interface ComboboxProps {
   options: ComboxOption[];
+  onSelect: (value: ComboxOption) => void;
 }
 
-export function Combobox({ options }: ComboboxProps) {
+export function Combobox({ options, onSelect }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
 
@@ -58,6 +59,7 @@ export function Combobox({ options }: ComboboxProps) {
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? '' : currentValue);
                     setOpen(false);
+                    onSelect(options.find((o) => o.value === currentValue)!);
                   }}
                 >
                   {option.label}
