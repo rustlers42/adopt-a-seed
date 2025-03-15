@@ -1,8 +1,13 @@
+import Link from "next/link";
+
 export default function Header() {
   return (
     <header className="h-16">
       <div className="flex items-center justify-between p-4">
-        <h1 className="text-2xl font-bold">adopt-a-seed</h1>
+        <Link href="/">
+          <h1 className="text-2xl font-bold">adopt-a-seed</h1>
+        </Link>
+
         <div className="flex items-center">
           <div className="ml-2">100</div>
           <div>
