@@ -17,6 +17,36 @@ async def get_plants(*, session: Session = Depends(get_session)):
     return session.query(Plant).all()
 
 
+@router.post("", response_model=Plant)
+async def post_plant(plant: Plant, session: Session = Depends(get_session)):
+    """
+    Create a new plant
+    """
+    session.add(plant)
+    session.commit()
+    session.refresh(plant)
+    return plant
+
+
+@router.put("/{plant_id}", response_model=Plant)
+async def put_plant(
+    plant_id: int, plant: Plant, session: Session = Depends(get_session)
+):
+    """
+    Update a plant
+    """
+    db_plant = session.get(Plant, plant_id)
+
+    # update the plant with the new data
+    db_plant.seed_id = plant.seed_id
+    db_plant.planted_at = plant.planted_at
+
+    session.add(db_plant)
+    session.commit()
+    session.refresh(db_plant)
+    return db_plant
+
+
 @router.post("/fill", tags=["mock"])
 async def fill_plants(*, session: Session = Depends(get_session)):
     """
