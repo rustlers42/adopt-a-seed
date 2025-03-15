@@ -1,20 +1,18 @@
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from pydantic import BaseModel
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session
 
 from ..database import get_session
 from ..oauth2_helper import Token, authenticate_user, create_access_token
+from ..settings import settings
 from .health import router as health_router
 from .plants import router as plants_router
 from .seed_databases import router as seed_databases_router
 from .seeds import router as seeds_router
 from .users import router as users_router
-
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 router = APIRouter()
 router.include_router(health_router, prefix="/health", tags=["health"])
@@ -36,7 +34,7 @@ async def login(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
     access_token = create_access_token(
         data={"email": user.email}, expires_delta=access_token_expires
     )

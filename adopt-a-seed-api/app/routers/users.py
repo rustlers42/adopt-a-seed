@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, Response, status
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 from ..database import get_session
 from ..models.User import User
-from ..oauth2_helper import get_current_user, get_password_hash
+from ..oauth2_helper import get_current_user
 
 router = APIRouter()
 
@@ -41,21 +41,3 @@ async def get_users_me(*, current_user: User = Depends(get_current_user)):
         username=current_user.username,
         score=current_user.score,
     )
-
-
-@router.post("/fill", tags=["mock"])
-async def fill_users(*, session=Depends(get_session)):
-    """
-    Fill the users table with some data
-    """
-    user = [
-        User(
-            email="admin@admin.de",
-            username="admin",
-            hashed_password=get_password_hash("admin"),
-            score=0,
-        )
-    ]
-    session.add_all(user)
-    session.commit()
-    return Response(content="OK", status_code=status.HTTP_200_OK)
