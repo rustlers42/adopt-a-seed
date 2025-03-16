@@ -22,25 +22,38 @@ docker compose up --build
 
 ## What's Currently Working
 
+- [x] Landing page
 - [x] Users can log in (with JWT tokens)
-- [x] There is a leaderboard where individuals can challenge each other
-- [x] Users can see all available seed databases
-- [x] Users can adopt a seed
+- [x] Users can log out
+- [x] Guests & Users can see a leaderboard
+- [x] Guests & Users can see all available seed databases and search them
+- [x] Users can see all relevant Events for them
+- [x] Users can see Growth & Telemetry Events for selected plant
+- [x] Users can adopt a seed from a seed database
+- [x] Users can adopt a seed they got themselves
 - [x] Users can return a seed
 - [x] Users can see the seeds they have adopted
 - [x] Users can track the progress of the seeds they have adopted
-- [x] There are rewards where users can earn adopt-a-seed coins
-- [x] AI-generated telemetry data based on a survey
-- [x] AI-generated growing tips for users to take care of the seed
+- [x] Users have a Köppen climate classification
+- [x] Tracking the progress of a plant rewards adopt-a-seed coins
+- [x] Returning a seed rewards adopt-a-seed coins using OTP tokens
+- [x] AI-generated telemetry data based on a survey and user climate zone
+- [x] AI-generated growing tips for users to take care of the seed based on past survey results
+- [x] Algorithm which decides whether next growth state has been reached
 - [x] Usage of a local Ollama instance
 
 ## Next Steps
 
-- [ ] A management system for seed databases
-- [ ] A one-time-password system to verify that the user has returned the new seeds to the seed database
+- [ ] A login/management system for the seed databases
+- [ ] Seed databases can see the state of all seeds they have given out
+- [ ] Generation of OTP for seed databases (currently 000-000 is always valid)
 - [ ] A detailed view for the seed databases and improved first contact experience
-- [ ] A store where users can purchase growing supplies with adopt-a-seed coins
+- [ ] Option to order seeds via mail
 - [ ] A seed recommendation system from the seed database
-- [ ] Recommendations based on the season or the user's location
+- [ ] Recommendations based on the season or the user's location (we already store the climate zone)
 - [ ] A user profile page
 - [ ] Track images of the seeds/plants in the grow history
+- [ ] Signup/Onboarding
+- [ ] Track time of plants
+- [ ] Option to link user account with cryptocurrency wallet
+- [ ] Smart contracts to generate adopt-a-seed cryptocurrency for users
