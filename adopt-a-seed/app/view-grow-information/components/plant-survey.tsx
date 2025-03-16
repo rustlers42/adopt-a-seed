@@ -34,24 +34,38 @@ export default function PlantSurvey({ id }: PlantPageProps) {
 
   useEffect(() => {
     if (status) {
-      const initialAnswers = status.questions.reduce(
-        (acc, q) => {
-          if (q.answer) acc[q.id] = q.answer;
-          return acc;
-        },
-        {} as { [key: number]: string },
-      );
-
-      setAnswers(initialAnswers);
+      setAnswers(extractAnswers(status));
     }
   }, [status]);
+
+  const extractAnswers = (status: PlantStatusDTO) => {
+    return status.questions.reduce(
+      (acc, q) => {
+        if (q.answer) acc[q.id] = q.answer;
+        return acc;
+      },
+      {} as { [key: number]: string },
+    );
+  };
 
   const handleAnswerChange = (questionId: number, value: string) => {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
   };
 
+  const prepareSubmissionData = (): PlantStatusDTO => {
+    if (!status) return {} as PlantStatusDTO;
+    return {
+      ...status,
+      questions: status.questions.map((q) => ({
+        ...q,
+        answer: answers[q.id] || null,
+      })),
+    };
+  };
+
   const handleSubmit = () => {
-    console.log("Submitted answers:", answers);
+    const submissionData = prepareSubmissionData();
+    console.log("Submitting:", submissionData);
     // TODO api calls to submit answers
   };
 
