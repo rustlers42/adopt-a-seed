@@ -398,8 +398,8 @@ async def post_plant_status(
     if plant is None:
         # plant does not count for the user return 404 not found
         return Response(status_code=status.HTTP_404_NOT_FOUND)
-    current_status = plant.current_status
-    next_status = current_status.get_next_status()
+    current_status: PlantStatus = plant.current_status
+    next_status: PlantStatus = current_status.get_next_status()
 
     logging.debug(plant_status_request)
 
@@ -443,7 +443,7 @@ async def post_plant_status(
                 plant_id=plant_id,
                 event_type=EventType.GROWING,
                 event_date=date.today().isoformat(),
-                event_description=f"Changed status from {current_status} to {next_status}",
+                event_description=f"Changed status from {current_status.value} to {next_status.value}",
             )
         )
 
