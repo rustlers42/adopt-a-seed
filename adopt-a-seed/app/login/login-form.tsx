@@ -66,8 +66,7 @@ export default function LoginForm() {
       // Use the login function from AuthContext
       login(data.access_token, data.token_type);
 
-      // Redirect to dashboard
-      router.push("/");
+      router.push("/dashboard");
     } catch (error) {
       console.error("Login failed", error);
       setError("Invalid username or password");
