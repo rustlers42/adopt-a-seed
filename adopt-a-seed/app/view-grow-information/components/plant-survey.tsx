@@ -11,6 +11,7 @@ import { TreesIcon as Plant, Smile, Meh, Frown, Laugh, Skull } from "lucide-reac
 import { Spinner } from "@/components/ui/spinner";
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
+import { useRouter } from "next/navigation";
 
 interface PlantPageProps {
   id: string;
@@ -30,6 +31,8 @@ type PlantStatusDTO = {
 };
 
 export default function PlantSurvey({ id }: PlantPageProps) {
+  const router = useRouter();
+
   const { getToken } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -102,6 +105,10 @@ export default function PlantSurvey({ id }: PlantPageProps) {
         setError(result.error);
       } else {
         setSuccess("Successfully submitted!");
+
+        setTimeout(() => {
+          router.refresh();
+        }, 1500);
       }
     } catch (err) {
       setError("Failed to submit. Please try again.");
@@ -138,27 +145,28 @@ export default function PlantSurvey({ id }: PlantPageProps) {
         </Alert>
       )}
 
-      {status.questions.map((question) => (
-        <div key={question.id} className="mb-4">
-          <h2>{question.question}</h2>
-          <div className="flex space-x-4">
-            {["1", "2", "3", "4", "5"].map((value) => {
-              const Icon = getIconForValue(value); // Get corresponding icon for value
-              return (
-                <div
-                  key={value}
-                  className={`cursor-pointer ${answers[question.id] === value ? "text-blue-600" : ""}`}
-                  onClick={() => handleAnswerChange(question.id, value)}
-                >
-                  <Icon className="h-8 w-8" />
-                </div>
-              );
-            })}
+      {!success &&
+        status.questions.map((question) => (
+          <div key={question.id} className="mb-4">
+            <h2>{question.question}</h2>
+            <div className="flex space-x-4">
+              {["1", "2", "3", "4", "5"].map((value) => {
+                const Icon = getIconForValue(value); // Get corresponding icon for value
+                return (
+                  <div
+                    key={value}
+                    className={`cursor-pointer ${answers[question.id] === value ? "text-blue-600" : ""}`}
+                    onClick={() => handleAnswerChange(question.id, value)}
+                  >
+                    <Icon className="h-8 w-8" />
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
 
-      {status.otp_question && (
+      {!success && status.otp_question && (
         <div className="mb-4">
           <h2>{status.otp_question.question}</h2>
           <InputOTP
@@ -182,11 +190,13 @@ export default function PlantSurvey({ id }: PlantPageProps) {
         </div>
       )}
 
-      <div className="flex space-x-2 mt-4">
-        <Button onClick={handleSubmit} className="bg-green-500 text-white" disabled={isSubmitting}>
-          Submit
-        </Button>
-      </div>
+      {!success && (
+        <div className="flex space-x-2 mt-4">
+          <Button onClick={handleSubmit} className="bg-green-500 text-white" disabled={isSubmitting}>
+            Submit
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
