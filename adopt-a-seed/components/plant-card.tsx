@@ -16,7 +16,7 @@ export function PlantCard({ plant }: PlantCardProps) {
           <p className="text-sm text-muted-foreground">{plant.seed_specific}</p>
         </div>
         <div>
-          <p className="text-sm font-medium">{format(new Date(plant.planted_at), "PPP")}</p>
+          {plant.planted_at && <p className="text-sm font-medium">{format(new Date(plant.planted_at), "PPP")}</p>}
           <p className="text-sm font-medium">{plant.current_status}</p>
         </div>
       </div>
