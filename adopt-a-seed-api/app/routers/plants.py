@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from sqlmodel import Session, select
 
 from ..database import get_session
-from ..models import Event, Plant, Seed, User
+from ..models import Event, Plant, Seed, SeedDatabase, User
 from ..oauth2_helper import get_current_user
 
 router = APIRouter()
@@ -11,6 +11,7 @@ router = APIRouter()
 
 class PlantRequest(BaseModel):
     seed_id: int
+    seed_database_id: int | None
     planted_at: str
 
 
@@ -18,6 +19,8 @@ class PlantResponse(BaseModel):
     id: int
     seed_category: str
     seed_specific: str
+    seed_database_name: str | None
+    seed_database_contact: str | None
     current_status: str
     planted_at: str | None
 
@@ -36,11 +39,14 @@ async def get_plants(
             Plant.id,
             Seed.category,
             Seed.specific_name,
+            SeedDatabase.name,
+            SeedDatabase.contact,
             Plant.current_status,
             Plant.planted_at,
         )
         .where(Plant.user_id == current_user.id)
         .join(Seed, Plant.seed_id == Seed.id)
+        .join(SeedDatabase, Plant.seed_database_id == SeedDatabase.id, isouter=True)
     ).all()
     print(plants)
     return [
@@ -49,6 +55,8 @@ async def get_plants(
             seed_category=plant.category,
             seed_specific=plant.specific_name,
             current_status=plant.current_status,
+            seed_database_name=plant.name,
+            seed_database_contact=plant.contact,
             planted_at=plant.planted_at,
         )
         for plant in plants
@@ -85,16 +93,21 @@ async def get_plant(
             Plant.id,
             Seed.category,
             Seed.specific_name,
+            SeedDatabase.name,
+            SeedDatabase.contact,
             Plant.current_status,
             Plant.planted_at,
         )
         .where(Plant.user_id == current_user.id, Plant.id == plant_id)
         .join(Seed, Plant.seed_id == Seed.id)
+        .join(SeedDatabase, Plant.seed_database_id == SeedDatabase.id, isouter=True)
     ).first()
     return PlantResponse(
         id=plant.id,
         seed_category=plant.category,
         seed_specific=plant.specific_name,
+        seed_database_name=plant.name,
+        seed_database_contact=plant.contact,
         current_status=plant.current_status,
         planted_at=plant.planted_at,
     )
@@ -113,6 +126,7 @@ async def put_plant(
     db_plant = session.get(Plant, plant_id)
 
     db_plant.seed_id = plant.seed_id
+    db_plant.seed_database_id = plant.seed_database_id
     db_plant.planted_at = plant.planted_at
 
     session.add(db_plant)

@@ -92,41 +92,84 @@ def create_db_and_tables():
             session.add_all(seeds)
             session.commit()
 
+        if session.exec(select(SeedDatabase)).first() is None:
+            logging.info("creating default seed databases because there are none")
+            seed_databases = [
+                SeedDatabase(
+                    name="Manhattan Seed Database", contact="example@example.com"
+                ),
+                SeedDatabase(
+                    name="Brooklyn Seed Bank", contact="contact@brooklynseed.com"
+                ),
+                SeedDatabase(name="Queens Urban Seeds", contact="info@queensseeds.org"),
+                SeedDatabase(
+                    name="Bronx Green Seeds", contact="support@bronxgreens.com"
+                ),
+                SeedDatabase(
+                    name="Staten Island Seed Vault",
+                    contact="admin@statenislandseeds.com",
+                ),
+                SeedDatabase(
+                    name="Chicago Seed Repository", contact="contact@chicagoseeds.com"
+                ),
+                SeedDatabase(
+                    name="San Francisco Seed Library", contact="info@sfseedlibrary.org"
+                ),
+                SeedDatabase(
+                    name="Los Angeles Seed Exchange",
+                    contact="support@laseedexchange.com",
+                ),
+                SeedDatabase(
+                    name="Seattle Seed Collective", contact="admin@seattleseeds.com"
+                ),
+                SeedDatabase(
+                    name="Portland Seed Network", contact="contact@portlandseeds.net"
+                ),
+            ]
+            session.add_all(seed_databases)
+            session.commit()
+
         if session.exec(select(Plant)).first() is None:
             logging.info("creating default plants because there are none")
             plants = [
                 Plant(
                     seed_id=1,
+                    seed_database_id=1,
                     user_id=1,
                     current_status=PlantStatus.RETURNED_SEEDS,
                     planted_at=date(2025, 1, 1).isoformat(),
                 ),
                 Plant(
                     seed_id=2,
+                    seed_database_id=1,
                     user_id=1,
                     current_status=PlantStatus.REPRODUCTIVE_PHASE,
                     planted_at=date(2025, 1, 2).isoformat(),
                 ),
                 Plant(
                     seed_id=3,
+                    seed_database_id=None,
                     user_id=1,
                     current_status=PlantStatus.VEGETATIVE_PHASE,
                     planted_at=date(2025, 1, 3).isoformat(),
                 ),
                 Plant(
                     seed_id=4,
+                    seed_database_id=None,
                     user_id=1,
                     current_status=PlantStatus.GERMINATION,
                     planted_at=date(2025, 1, 4).isoformat(),
                 ),
                 Plant(
                     seed_id=5,
+                    seed_database_id=2,
                     user_id=1,
                     current_status=PlantStatus.PENDING,
                     planted_at=None,
                 ),
                 Plant(
                     seed_id=5,
+                    seed_database_id=2,
                     user_id=2,
                     current_status=PlantStatus.VEGETATIVE_PHASE,
                     planted_at=date(2025, 1, 5).isoformat(),
@@ -180,43 +223,6 @@ def create_db_and_tables():
                 ),
             ]
             session.add_all(events)
-            session.commit()
-
-        if session.exec(select(SeedDatabase)).first() is None:
-            logging.info("creating default seed databases because there are none")
-            seed_databases = [
-                SeedDatabase(
-                    name="Manhattan Seed Database", contact="example@example.com"
-                ),
-                SeedDatabase(
-                    name="Brooklyn Seed Bank", contact="contact@brooklynseed.com"
-                ),
-                SeedDatabase(name="Queens Urban Seeds", contact="info@queensseeds.org"),
-                SeedDatabase(
-                    name="Bronx Green Seeds", contact="support@bronxgreens.com"
-                ),
-                SeedDatabase(
-                    name="Staten Island Seed Vault",
-                    contact="admin@statenislandseeds.com",
-                ),
-                SeedDatabase(
-                    name="Chicago Seed Repository", contact="contact@chicagoseeds.com"
-                ),
-                SeedDatabase(
-                    name="San Francisco Seed Library", contact="info@sfseedlibrary.org"
-                ),
-                SeedDatabase(
-                    name="Los Angeles Seed Exchange",
-                    contact="support@laseedexchange.com",
-                ),
-                SeedDatabase(
-                    name="Seattle Seed Collective", contact="admin@seattleseeds.com"
-                ),
-                SeedDatabase(
-                    name="Portland Seed Network", contact="contact@portlandseeds.net"
-                ),
-            ]
-            session.add_all(seed_databases)
             session.commit()
 
         if session.exec(select(SeedToSeedDatabase)).first() is None:
