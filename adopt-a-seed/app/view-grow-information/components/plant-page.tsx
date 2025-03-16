@@ -1,14 +1,14 @@
 ﻿"use client";
 
-import PlantDetails from "./PlantDetails";
-import PlantSurvey from "./PlantSurvey";
 import { useFetchApi } from "@/lib/use-api";
+import PlantDetails from "./plant-details";
+import PlantSurvey from "./plant-survey";
 
-import { PlantDTO } from "@/lib/plant";
 import EventList from "@/app/view-events/components/event-list";
-import { EventDTO } from "@/lib/event";
 import HelpAlert from "@/app/view-grow-information/components/help-alert";
 import ProtectedRoute from "@/components/protected-route";
+import { EventDTO } from "@/lib/event";
+import { PlantDTO } from "@/lib/plant";
 
 interface PlantPageProps {
   id: string;
