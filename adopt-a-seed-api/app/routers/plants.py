@@ -43,11 +43,12 @@ class QuestionAnswer(enum.Enum):
 class Question(BaseModel):
     id: int
     question: str
-    answer: QuestionAnswer | None
+    answer: QuestionAnswer | str | None
 
 
 class PlantStatusRequest(BaseModel):
     questions: list[Question]
+    otp_question: Question | None
 
 
 class PlantStatusResponse(PlantStatusRequest):
@@ -119,6 +120,12 @@ questions = [
         answer=None,
     ),
 ]
+
+otp_question = Question(
+    id=0,
+    question="Enter the OTP from the seed database that you have successfully returned the seeds to the seed database",
+    answer=None,
+)
 
 question_catalog = {
     PlantStatus.GERMINATION: [10, 11, 14, 15],  # 1, 3, 16
@@ -304,12 +311,15 @@ async def get_plant_status(
         current_status=plant.current_status.value,
         next_status=next_status.value if next_status else None,
         questions=questions_to_answer,
+        otp_question=(
+            otp_question if next_status == PlantStatus.RETURNED_SEEDS else None
+        ),
     )
 
 
 @router.post("/{plant_id}/status", response_model=PlantStatusUpdateResponse)
 async def post_plant_status(
-    plantStatus: PlantStatusRequest,
+    plant_status: PlantStatusRequest,
     plant_id: int,
     session: Session = Depends(get_session),
     current_user: User = Depends(get_current_user),
@@ -341,7 +351,7 @@ async def post_plant_status(
                     seed_specific: {plant.specific_name}
                     current_status: {current_status}
                     next_status: {next_status}
-                    questions: {plantStatus.questions}
+                    questions: {plant_status.questions}
                 """,
         },
     ]
@@ -364,7 +374,7 @@ async def post_plant_status(
                     seed_specific: {plant.specific_name}
                     current_status: {current_status}
                     next_status: {next_status}
-                    questions: {plantStatus.questions}
+                    questions: {plant_status.questions}
                 """,
         },
     ]
@@ -389,7 +399,10 @@ async def post_plant_status(
     increment_score = 0
     is_transitioned: bool = False
     # check if message contains the word "yes"
-    if "yes" in messages_reccomendation_transition.lower():
+    if (
+        "yes" in messages_reccomendation_transition.lower()
+        and plant_status.otp_question == "000000"
+    ):
         is_transitioned = True
         # initiate the transition to the next status
         session.exec(
