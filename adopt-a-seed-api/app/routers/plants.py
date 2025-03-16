@@ -220,7 +220,7 @@ async def post_plant(
     session.add(new_event)
     session.commit()
     session.refresh(new_plant)
-    
+
     return new_plant
 
 
@@ -398,6 +398,53 @@ async def post_plant_status(
             )
         )
         session.commit()
+
+    return Response(content=messages_telemetry, status_code=status.HTTP_200_OK)
+
+
+@router.get("/{plant_id}/help")
+async def get_plant_help(
+    plant_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Get help for the plant
+    """
+    plant = session.exec(
+        select(
+            Plant.planted_at, Seed.category, Seed.specific_name, Plant.current_status
+        )
+        .where(Plant.id == plant_id)
+        .join(Seed, Seed.id == Plant.id)
+    ).first()
+    events = session.exec(
+        select(Event)
+        .where(Event.user_id == current_user.id, Event.plant_id == plant_id)
+        .order_by(Event.event_date.desc())
+    ).all()
+
+    messages = [
+        {
+            "role": "system",
+            "content": "You are an assistant giving advive to people who are growing plants. You receive a list of events regarding the growth process of the plant. You need to give advice to the user about he can improve based on the history. And also dont ask further questions.",
+        },
+        {
+            "role": "user",
+            "content": f"""
+                    planted_at: {plant.planted_at}
+                    seed_category: {plant.category}
+                    seed_specific: {plant.specific_name}
+                    current_status: {plant.current_status}
+                    events: {events}
+                """,
+        },
+    ]
+    response: ChatResponse = chat(
+        model=settings.ollama_model,
+        messages=messages,
+    )
+    messages_telemetry: str = response["message"]["content"].strip()
 
     return Response(content=messages_telemetry, status_code=status.HTTP_200_OK)
 
