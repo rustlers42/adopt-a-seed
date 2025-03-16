@@ -369,6 +369,8 @@ async def post_plant_status(
         and plant_status_request.otp_question.answer != "000000"
     ):
         return Response(status_code=status.HTTP_400_BAD_REQUEST)
+    if [answer for answer in plant_status_request.questions if answer.answer is None]:
+        return Response(status_code=status.HTTP_400_BAD_REQUEST)
     plant = session.exec(
         select(
             Plant.planted_at, Seed.category, Seed.specific_name, Plant.current_status
@@ -479,16 +481,34 @@ async def get_plant_help(
         .order_by(Event.event_date.desc())
     ).all()
 
-    messages_telemetry = await prompt_general_plant_help_messages(
-        f"""
-            planted_at: {plant.planted_at}
-            seed_category: {plant.category}
-            seed_specific: {plant.specific_name}
-            current_status: {plant.current_status}
-            user_koppen_climate_classification: {current_user.koppen_climate_classification}
-            events: {events}
-        """
-    )
+    messages_telemetry = ""
+    match plant.current_status:
+        case PlantStatus.RETURNED_SEEDS:
+            messages_telemetry = messages_telemetry = (
+                await prompt_general_plant_help_messages(
+                    f"""
+                    planted_at: {plant.planted_at}
+                    seed_category: {plant.category}
+                    seed_specific: {plant.specific_name}
+                    current_status: {plant.current_status}
+                    user_koppen_climate_classification: {current_user.koppen_climate_classification}
+                    events: {events}
+
+                    The seeds are already returned to the seed database so just give some furter hints and start with: "Congratulations! The seeds are already returned to the seed database so you can now focus on..."
+                """
+                )
+            )
+        case _:
+            messages_telemetry = await prompt_general_plant_help_messages(
+                f"""
+                    planted_at: {plant.planted_at}
+                    seed_category: {plant.category}
+                    seed_specific: {plant.specific_name}
+                    current_status: {plant.current_status}
+                    user_koppen_climate_classification: {current_user.koppen_climate_classification}
+                    events: {events}
+                """
+            )
 
     return PlantStatusHelpResponse(text=messages_telemetry)
 
