@@ -20,6 +20,39 @@ For simplicity, there is a single command to start everything. This command will
 docker compose up --build
 ```
 
+## UN SDG Goals we are aiming for
+
+### Zero Hunger
+
+"End hunger, achieve food security and improved nutrition, and promote sustainable agriculture"
+
+- **Seed Adoption and Distribution**: Facilitates easier access to diverse, nutritious plants, potentially increasing food security through household or community gardening.
+- **AI-generated Growing Tips**: Equips users with personalized information to grow edible plants more effectively, improving nutrition and yield.
+- **Climate-Based Seed Recommendations**: Matching seeds to the user's Köppen climate classification ensures higher success rates, maximizing crop yields and minimizing resource waste.
+
+### Sustainable Cities and Communities
+
+"Make cities and settlements inclusive, safe, resilient and sustainable"
+
+- **Community Engagement through Leaderboard and Events**: Promotes sustainable urban gardening practices by engaging community members, encouraging participation, and fostering urban green spaces.
+- **Plant Tracking and Reward System**: Incentivizes continuous user engagement, increasing sustainability awareness and long-term commitment to greener urban living.
+
+### Life on Land
+
+"Take urgent action to combat climate change and its impacts"
+
+- **AI-generated Climate-Sensitive Telemetry and Tips**: Encourages users to adopt plants suitable for their climate zones, promoting resilience to climate impacts.
+- **Growth State Algorithm**: Encourages sustainable gardening practices and environmental awareness by rewarding user efforts and successful plant management.
+- **User Climate Awareness**: Users learn about their climate classification, raising awareness and informing actions to reduce environmental impact.
+
+### Climate Action
+
+"Protect and restore terrestrial ecosystems and promote their sustainable use, manage forests sustainably, combat desertification, stop and reverse land degradation, and stop the loss of biodiversity"
+
+- **Promotion of Biodiversity**: Provides diverse seed databases, enabling users to grow and conserve various plant species.
+- **Adoption and Return System**: Encourages users to sustainably engage with plant species, enhancing the conservation of terrestrial ecosystems.
+- **Seed Tracking and Growth History**: Helps users see their direct impact on plant life, encouraging sustained efforts in biodiversity conservation and restoration efforts.
+
 ## What's Currently Working
 
 - [x] Landing page
