@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, Leaf, Coins, Globe, Sprout } from "lucide-react";
+import { ArrowRight, Coins, Globe, Leaf, Sprout } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -118,7 +118,7 @@ export default function LandingPage() {
                     <div>
                       <h3 className="text-xl font-semibold mb-1">Earn While You Grow</h3>
                       <p className="text-muted-foreground">
-                        Get rewarded with AdoptASeed coins for growing and documenting your plants' progress.
+                        Get rewarded with AdoptASeed coins for growing and documenting your plants&apos; progress.
                       </p>
                     </div>
                   </div>
@@ -169,8 +169,8 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <p className="text-muted-foreground">
-                  "I've earned over 500 AdoptASeed coins while growing rare herbs on my balcony. It's amazing to be
-                  rewarded for something I love doing anyway!"
+                  &quot;I&apos;ve earned over 500 AdoptASeed coins while growing rare herbs on my balcony. It&apos;s
+                  amazing to be rewarded for something I love doing anyway!&quot;
                 </p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-sm">
@@ -182,8 +182,8 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <p className="text-muted-foreground">
-                  "Our community garden has become a hub for rare seed cultivation. The platform has connected us with
-                  seeds we never would have found otherwise."
+                  &quot;Our community garden has become a hub for rare seed cultivation. The platform has connected us
+                  with seeds we never would have found otherwise.&quot;
                 </p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-sm">
@@ -195,8 +195,8 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <p className="text-muted-foreground">
-                  "As a scientist, I appreciate the data we're collecting on how different seeds adapt to various
-                  environments. Plus, the rewards are a great bonus!"
+                  &quot;As a scientist, I appreciate the data we&apos;re collecting on how different seeds adapt to
+                  various environments. Plus, the rewards are a great bonus!&quot;
                 </p>
               </div>
             </div>
