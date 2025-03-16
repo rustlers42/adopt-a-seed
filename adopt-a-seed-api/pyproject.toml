@@ -12,6 +12,7 @@ dependencies = [
     "pydantic>=2.10.6",
     "pyjwt>=2.10.1",
     "python-multipart>=0.0.20",
+    "pyyaml>=6.0.2",
     "sqlmodel>=0.0.24",
     "uvicorn>=0.34.0",
 ]
