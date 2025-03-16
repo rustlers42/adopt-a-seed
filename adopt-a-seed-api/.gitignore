@@ -1,2 +1,4 @@
+.venv
+.ruff_cache
 database.db
 __pycache__
