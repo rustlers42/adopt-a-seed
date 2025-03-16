@@ -1,9 +1,10 @@
 import { Plant } from "@/lib/plant";
 import { format } from "date-fns";
 import Link from "next/link";
+import { PlantDTO } from "@/app/page";
 
 interface PlantCardProps {
-  plant: Plant;
+  plant: PlantDTO;
 }
 
 export function PlantCard({ plant }: PlantCardProps) {
@@ -11,8 +12,8 @@ export function PlantCard({ plant }: PlantCardProps) {
     <Link href={`/view-grow-information/${plant.id}`}>
       <div className="border rounded-md p-4 w-48 h-64 flex flex-col justify-between cursor-pointer">
         <div>
-          <h2 className="text-lg font-bold">{plant.seed.category}</h2>
-          <p className="text-sm text-muted-foreground">{plant.seed.specific}</p>
+          <h2 className="text-lg font-bold">{plant.seed_category}</h2>
+          <p className="text-sm text-muted-foreground">{plant.seed_specific}</p>
         </div>
         <div>
           <p className="text-sm">Planted at:</p>
