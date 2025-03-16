@@ -55,6 +55,12 @@ class PlantStatusResponse(PlantStatusRequest):
     next_status: str
 
 
+class PlantStatusUpdateResponse(BaseModel):
+    increment_score: int
+    is_transitioned: bool
+    telemetry: str
+
+
 questions = [
     Question(id=1, question="How wet is the soil?", answer=None),
     Question(
@@ -301,7 +307,7 @@ async def get_plant_status(
     )
 
 
-@router.post("/{plant_id}/status")  # , response_model=PlantStatusResponse)
+@router.post("/{plant_id}/status", response_model=PlantStatusUpdateResponse)
 async def post_plant_status(
     plantStatus: PlantStatusRequest,
     plant_id: int,
@@ -380,8 +386,11 @@ async def post_plant_status(
     )
     session.commit()
 
+    increment_score = 0
+    is_transitioned: bool = False
     # check if message contains the word "yes"
     if "yes" in messages_reccomendation_transition.lower():
+        is_transitioned = True
         # initiate the transition to the next status
         session.exec(
             update(Plant).where(Plant.id == plant_id).values(current_status=next_status)
@@ -396,9 +405,32 @@ async def post_plant_status(
                 event_description=f"Changed status from {current_status} to {next_status}",
             )
         )
+
+        # also let the user gain some score weighted by the next status
+        match next_status:
+            case PlantStatus.GERMINATION:
+                increment_score = 10
+            case PlantStatus.SEEDLING:
+                increment_score = 20
+            case PlantStatus.VEGETATIVE_PHASE:
+                increment_score = 30
+            case PlantStatus.REPRODUCTIVE_PHASE:
+                increment_score = 40
+            case PlantStatus.RETURNED_SEEDS:
+                increment_score = 150
+
+        session.exec(
+            update(User)
+            .where(User.id == current_user.id)
+            .values(score=User.score + increment_score)
+        )
         session.commit()
 
-    return Response(content=messages_telemetry, status_code=status.HTTP_200_OK)
+    return PlantStatusUpdateResponse(
+        increment_score=increment_score,
+        is_transitioned=is_transitioned,
+        telemetry=messages_telemetry,
+    )
 
 
 @router.get("/{plant_id}/help")
