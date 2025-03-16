@@ -9,7 +9,8 @@ DATABASE_URL="<changeme>"
 SECRET_KEY="<changeme>"
 ALGORITHM="<changeme>"
 ACCESS_TOKEN_EXPIRE_MINUTES=<changeme>
-OLLAMA_MODEL="<changeme>"
+OLLAMA_MODEL="gemma3:4b"
+OLLAMA_URL="http://ollama:11434"
 ```
 
 ```bash
