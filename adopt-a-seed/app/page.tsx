@@ -81,7 +81,7 @@ export default function LandingPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Earn & Withdraw</h3>
                 <p className="text-muted-foreground">
-                  Earn AdoptASeed coins for your contributions, which can be withdrawn as our custom cryptocurrency.
+                  Earn adopt-a-seed coins for your contributions, which can be withdrawn as our custom cryptocurrency.
                 </p>
               </div>
             </div>
@@ -118,7 +118,7 @@ export default function LandingPage() {
                     <div>
                       <h3 className="text-xl font-semibold mb-1">Earn While You Grow</h3>
                       <p className="text-muted-foreground">
-                        Get rewarded with AdoptASeed coins for growing and documenting your plants&apos; progress.
+                        Get rewarded with adopt-a-seed coins for growing and documenting your plants&apos; progress.
                       </p>
                     </div>
                   </div>
@@ -156,7 +156,7 @@ export default function LandingPage() {
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">What Our Growers Say</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Join thousands of satisfied growers who are making a difference
+                Hear from our community members who are contributing to a sustainable future
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -169,8 +169,9 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <p className="text-muted-foreground">
-                  &quot;I&apos;ve earned over 500 AdoptASeed coins while growing rare herbs on my balcony. It&apos;s
-                  amazing to be rewarded for something I love doing anyway!&quot;
+                  &quot;Participating in adopt-a-seed has been a rewarding experience. I've cultivated rare herbs on my
+                  balcony and earned over 500 adopt-a-seed coins. It's fulfilling to contribute to biodiversity while
+                  being rewarded for my efforts.&quot;
                 </p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-sm">
@@ -182,8 +183,9 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <p className="text-muted-foreground">
-                  &quot;Our community garden has become a hub for rare seed cultivation. The platform has connected us
-                  with seeds we never would have found otherwise.&quot;
+                  &quot;Our community garden has thrived with the rare seeds we've adopted through adopt-a-seed. The
+                  platform has connected us with unique plant species, fostering a sense of community and contributing
+                  to environmental sustainability.&quot;
                 </p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-sm">
@@ -195,8 +197,9 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <p className="text-muted-foreground">
-                  &quot;As a scientist, I appreciate the data we&apos;re collecting on how different seeds adapt to
-                  various environments. Plus, the rewards are a great bonus!&quot;
+                  &quot;As an environmental scientist, I value the data collected on seed adaptation to various
+                  environments. adopt-a-seed not only supports biodiversity but also provides valuable insights for
+                  scientific research. The rewards are an added bonus!&quot;
                 </p>
               </div>
             </div>
