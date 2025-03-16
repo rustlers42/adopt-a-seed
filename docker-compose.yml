@@ -14,6 +14,7 @@ services:
       context: ./adopt-a-seed-api
       dockerfile: Dockerfile
     image: adopt-a-seed-api
+    env_file: ./adopt-a-seed-api/.env
     hostname: backend
     restart: unless-stopped
     ports:

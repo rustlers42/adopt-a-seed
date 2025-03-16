@@ -8,7 +8,8 @@ WORKDIR /app
 FROM base AS deps
 # Install dependencies based on the preferred package manager
 COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile --production
+RUN bun install --frozen-lockfile 
+# --production currently issues with this flag
 
 # Rebuild the source code only when needed
 FROM base AS builder
