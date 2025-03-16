@@ -1,4 +1,4 @@
-# Adopt-A-Seed
+# adopt-a-seed
 
 ## Frontend
 
@@ -68,8 +68,8 @@ docker compose up --build
 - [x] Users can see the seeds they have adopted
 - [x] Users can track the progress of the seeds they have adopted
 - [x] Users have a Köppen climate classification
-- [x] Tracking the progress of a plant rewards Adopt-A-Seed coins
-- [x] Returning a seed rewards Adopt-A-Seed coins using OTP tokens
+- [x] Tracking the progress of a plant rewards adopt-a-seed coins
+- [x] Returning a seed rewards adopt-a-seed coins using OTP tokens
 - [x] AI-generated telemetry data based on a survey and user climate zone
 - [x] AI-generated growing tips for users to take care of the seed based on past survey results
 - [x] Algorithm which decides whether the next growth state has been reached
@@ -89,4 +89,4 @@ docker compose up --build
 - [ ] Signup/Onboarding
 - [ ] Track time of plants
 - [ ] Option to link user account with cryptocurrency wallet
-- [ ] Smart contracts to generate Adopt-A-Seed cryptocurrency for users
+- [ ] Smart contracts to generate adopt-a-seed cryptocurrency for users
