@@ -409,6 +409,7 @@ async def post_plant_status(
     average_score = sum([int(q.answer) for q in plant_status_request.questions]) / len(
         plant_status_request.questions
     )
+    max_score = max([int(q.answer) for q in plant_status_request.questions])
 
     background_tasks.add_task(
         document_telemetry_data,
@@ -430,9 +431,13 @@ async def post_plant_status(
     is_transitioned: bool = False
     # check if the average score is less than 3 and if the OTP question is either None or answered correctly
     logging.debug(f"average score: {average_score}")
-    if average_score < 3 and (
-        plant_status_request.otp_question is None
-        or plant_status_request.otp_question.answer == "000000"
+    if (
+        average_score < 3
+        and max_score < 5
+        and (
+            plant_status_request.otp_question is None
+            or plant_status_request.otp_question.answer == "000000"
+        )
     ):
         is_transitioned = True
         # initiate the transition to the next status
