@@ -17,7 +17,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  data: TData[] | null;
 }
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
@@ -25,7 +25,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   const [globalFilter, setGlobalFilter] = React.useState("");
 
   const table = useReactTable({
-    data,
+    data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
@@ -40,6 +40,8 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
       return true;
     },
   });
+
+  console.log(data);
 
   return (
     <div>
