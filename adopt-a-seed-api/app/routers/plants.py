@@ -20,7 +20,8 @@ class PlantResponse(BaseModel):
     id: int
     seed_category: str
     seed_specific: str
-    planted_at: str
+    current_status: str
+    planted_at: str | None
 
 
 @router.get("", response_model=list[PlantResponse])
@@ -33,15 +34,23 @@ async def get_plants(
     Get all plants
     """
     plants = session.exec(
-        select(Plant.id, Seed.category, Seed.specific_name, Plant.planted_at)
+        select(
+            Plant.id,
+            Seed.category,
+            Seed.specific_name,
+            Plant.current_status,
+            Plant.planted_at,
+        )
         .where(Plant.user_id == current_user.id)
         .join(Seed, Plant.seed_id == Seed.id)
     ).all()
+    print(plants)
     return [
         PlantResponse(
             id=plant.id,
             seed_category=plant.category,
             seed_specific=plant.specific_name,
+            current_status=plant.current_status,
             planted_at=plant.planted_at,
         )
         for plant in plants
@@ -74,7 +83,13 @@ async def get_plant(
     Get a plant
     """
     plant = session.exec(
-        select(Plant.id, Seed.category, Seed.specific_name, Plant.planted_at)
+        select(
+            Plant.id,
+            Seed.category,
+            Seed.specific_name,
+            Plant.current_status,
+            Plant.planted_at,
+        )
         .where(Plant.user_id == current_user.id, Plant.id == plant_id)
         .join(Seed, Plant.seed_id == Seed.id)
     ).first()
@@ -82,6 +97,7 @@ async def get_plant(
         id=plant.id,
         seed_category=plant.category,
         seed_specific=plant.specific_name,
+        current_status=plant.current_status,
         planted_at=plant.planted_at,
     )
 

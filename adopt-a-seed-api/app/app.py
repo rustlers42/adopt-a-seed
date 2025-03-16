@@ -7,6 +7,7 @@ from sqlmodel import Session, SQLModel, select
 
 from .database import engine
 from .models.Plant import Plant
+from .models.PlantStatus import PlantStatus
 from .models.Seed import Seed
 from .models.SeedDatabase import SeedDatabase
 from .models.SeedToSeedDatabase import SeedToSeedDatabase
@@ -97,11 +98,42 @@ def create_db_and_tables():
         if session.exec(select(Plant)).first() is None:
             logging.info("creating default plants because there are none")
             plants = [
-                Plant(seed_id=1, user_id=1, planted_at=date(2025, 1, 1).isoformat()),
-                Plant(seed_id=2, user_id=1, planted_at=date(2025, 1, 2).isoformat()),
-                Plant(seed_id=3, user_id=1, planted_at=date(2025, 1, 3).isoformat()),
-                Plant(seed_id=4, user_id=1, planted_at=date(2025, 1, 4).isoformat()),
-                Plant(seed_id=5, user_id=2, planted_at=date(2025, 1, 5).isoformat()),
+                Plant(
+                    seed_id=1,
+                    user_id=1,
+                    current_status=PlantStatus.RETURNED_SEEDS,
+                    planted_at=date(2025, 1, 1).isoformat(),
+                ),
+                Plant(
+                    seed_id=2,
+                    user_id=1,
+                    current_status=PlantStatus.REPRODUCTIVE_PHASE,
+                    planted_at=date(2025, 1, 2).isoformat(),
+                ),
+                Plant(
+                    seed_id=3,
+                    user_id=1,
+                    current_status=PlantStatus.VEGETATIVE_PHASE,
+                    planted_at=date(2025, 1, 3).isoformat(),
+                ),
+                Plant(
+                    seed_id=4,
+                    user_id=1,
+                    current_status=PlantStatus.GERMINATION,
+                    planted_at=date(2025, 1, 4).isoformat(),
+                ),
+                Plant(
+                    seed_id=5,
+                    user_id=1,
+                    current_status=PlantStatus.PENDING,
+                    planted_at=None,
+                ),
+                Plant(
+                    seed_id=5,
+                    user_id=2,
+                    current_status=PlantStatus.VEGETATIVE_PHASE,
+                    planted_at=date(2025, 1, 5).isoformat(),
+                ),
             ]
             session.add_all(plants)
             session.commit()
