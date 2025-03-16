@@ -214,19 +214,6 @@ export default function LandingPage() {
                 Start growing, earning, and making a positive impact on our planet. Sign up now and get your first seeds
                 for free!
               </p>
-              <div className="w-full max-w-md space-y-4 mt-4">
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <Input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
-                  />
-                  <Button className="bg-white text-green-800 hover:bg-white/90">Get Started</Button>
-                </div>
-                <p className="text-sm opacity-80">
-                  By signing up, you agree to our Terms of Service and Privacy Policy.
-                </p>
-              </div>
             </div>
           </div>
         </section>
