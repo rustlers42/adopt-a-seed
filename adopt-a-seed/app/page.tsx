@@ -62,8 +62,7 @@ export default function LandingPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Search & Adopt</h3>
                 <p className="text-muted-foreground">
-                  Browse our database of rare and endangered seeds from registered seed banks and adopt the ones you
-                  want to grow.
+                  Browse our database of seeds from registered local seed databases and adopt the ones you want to grow.
                 </p>
               </div>
               <div className="flex flex-col items-center text-center p-6 rounded-lg bg-white shadow-sm">
@@ -169,9 +168,9 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <p className="text-muted-foreground">
-                  &quot;Participating in adopt-a-seed has been a rewarding experience. I've cultivated rare herbs on my
-                  balcony and earned over 500 adopt-a-seed coins. It's fulfilling to contribute to biodiversity while
-                  being rewarded for my efforts.&quot;
+                  &quot;Participating in adopt-a-seed has been a rewarding experience. I&apos;ve cultivated rare herbs
+                  on my balcony and earned over 500 adopt-a-seed coins. It&apos;s fulfilling to contribute to
+                  biodiversity while being rewarded for my efforts.&quot;
                 </p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-sm">
@@ -183,9 +182,9 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <p className="text-muted-foreground">
-                  &quot;Our community garden has thrived with the rare seeds we've adopted through adopt-a-seed. The
-                  platform has connected us with unique plant species, fostering a sense of community and contributing
-                  to environmental sustainability.&quot;
+                  &quot;Our community garden has thrived with the rare seeds we&apos;ve adopted through adopt-a-seed.
+                  The platform has connected us with unique plant species, fostering a sense of community and
+                  contributing to environmental sustainability.&quot;
                 </p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-sm">
