@@ -28,12 +28,18 @@ class PlantResponse(BaseModel):
 @router.get("", response_model=list[PlantResponse])
 async def get_plants(
     *,
+    order: str = "desc",
     session: Session = Depends(get_session),
     current_user: User = Depends(get_current_user),
 ):
     """
     Get all plants
     """
+    order_by_clause = (
+        Plant.planted_at.desc().nullsfirst()
+        if order == "desc"
+        else Plant.planted_at.asc().nullslast()
+    )
     plants = session.exec(
         select(
             Plant.id,
@@ -47,6 +53,7 @@ async def get_plants(
         .where(Plant.user_id == current_user.id)
         .join(Seed, Plant.seed_id == Seed.id)
         .join(SeedDatabase, Plant.seed_database_id == SeedDatabase.id, isouter=True)
+        .order_by(order_by_clause)
     ).all()
     print(plants)
     return [
