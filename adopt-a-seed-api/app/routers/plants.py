@@ -69,42 +69,44 @@ class PlantStatusUpdateResponse(BaseModel):
 
 
 questions = [
-    Question(id=1, question="How wet is the soil?", answer=None),
+    Question(id=1, question="How moist is the soil?", answer=None),
     Question(
         id=2,
-        question="Has the plant received enough water since the last quiz?",
+        question="Has the plant received enough water since the last check?",
         answer=None,
     ),
     Question(
-        id=3, question="How much light is the plant receiving currently?", answer=None
+        id=3, question="How much light is the plant currently receiving?", answer=None
     ),
     Question(
         id=4,
-        question="Has the plant received sufficient light since the last quiz?",
+        question="Has the plant received sufficient light since the last check?",
         answer=None,
     ),
-    Question(id=5, question="Do you see a sprout emerging?", answer=None),
+    Question(id=5, question="Do you see any sprouts emerging?", answer=None),
     Question(
-        id=6, question="Do you see noticeable growth since the last quiz?", answer=None
+        id=6, question="Is there noticeable growth since the last check?", answer=None
     ),
     Question(
         id=7, question="Has the plant started forming blossoms or buds?", answer=None
     ),
     Question(id=8, question="Does the plant look healthy overall?", answer=None),
     Question(
-        id=9, question="Have you added any nutrients since the last quiz?", answer=None
+        id=9, question="Have you added any nutrients since the last check?", answer=None
     ),
-    Question(id=10, question="Have you placed your seed into soil yet?", answer=None),
-    Question(id=11, question="How big is the pot/container?", answer=None),
+    Question(id=10, question="Have you planted your seed in soil yet?", answer=None),
+    Question(id=11, question="What is the size of the pot/container?", answer=None),
     Question(id=12, question="Has the plant developed any fruits?", answer=None),
-    Question(id=13, question="Are there signs of pests or diseases?", answer=None),
+    Question(id=13, question="Are there any signs of pests or diseases?", answer=None),
     Question(
         id=14,
         question="Is the temperature appropriate for the current growth stage?",
         answer=None,
     ),
     Question(
-        id=15, question="Is the humidity optimal for the current stage?", answer=None
+        id=15,
+        question="Is the humidity optimal for the current growth stage?",
+        answer=None,
     ),
     Question(
         id=16,
@@ -113,7 +115,7 @@ questions = [
     ),
     Question(
         id=17,
-        question="Are plants appropriately spaced or do they need repotting?",
+        question="Are the plants appropriately spaced, or do they need repotting?",
         answer=None,
     ),
     Question(
@@ -129,7 +131,7 @@ questions = [
 
 otp_question = Question(
     id=0,
-    question="Enter the OTP from the seed database that you have successfully returned the seeds to the seed database",
+    question="Enter the OTP from the seed database confirming you have successfully returned the seeds.",
     answer=None,
 )
 
@@ -379,7 +381,8 @@ async def post_plant_status(
     current_user: User = Depends(get_current_user),
 ) -> Response:
     """
-    Update the status of the plant for that firstly check the questions and answers for the transition to the next status. When certain criterias are met transition the plant to the next status and also create an event for that.
+    Update the status of the plant. First, check the questions and answers for the transition to the next status.
+    When certain criteria are met, transition the plant to the next status and also create an event for that.
     """
     if (
         plant_status_request.otp_question is not None
@@ -393,17 +396,17 @@ async def post_plant_status(
             Plant.planted_at, Seed.category, Seed.specific_name, Plant.current_status
         )
         .where(Plant.id == plant_id)
-        .join(Seed, Seed.id == Plant.id)
+        .join(Seed, Seed.id == Plant.seed_id)
     ).first()
     if plant is None:
-        # plant does not count for the user return 404 not found
+        # plant does not belong to the user, return 404 not found
         return Response(status_code=status.HTTP_404_NOT_FOUND)
     current_status: PlantStatus = plant.current_status
     next_status: PlantStatus = current_status.get_next_status()
 
     logging.debug(plant_status_request)
 
-    avaerage_score = sum([int(q.answer) for q in plant_status_request.questions]) / len(
+    average_score = sum([int(q.answer) for q in plant_status_request.questions]) / len(
         plant_status_request.questions
     )
 
@@ -425,9 +428,9 @@ async def post_plant_status(
 
     increment_score = 0
     is_transitioned: bool = False
-    # check if message contains the word "yes"
-    logging.debug(f"average score: {avaerage_score}")
-    if avaerage_score < 3 and (
+    # check if the average score is less than 3 and if the OTP question is either None or answered correctly
+    logging.debug(f"average score: {average_score}")
+    if average_score < 3 and (
         plant_status_request.otp_question is None
         or plant_status_request.otp_question.answer == "000000"
     ):
