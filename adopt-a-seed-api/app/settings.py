@@ -12,5 +12,8 @@ class Settings(BaseSettings):
     algorithm: str
     access_token_expire_minutes: int
 
+    # AI
+    ollama_model: str = "gemma3:4b"
+
 
 settings = Settings()
