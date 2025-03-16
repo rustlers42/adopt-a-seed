@@ -7,7 +7,7 @@ import { SeedDatabaseDTO } from "@/lib/seed-database";
 
 export default function ViewSeedDatabasePage() {
   let { data: entries, isLoading } = useFetchApi<SeedDatabaseDTO[]>(`http://localhost:8000/seed_databases/seeds`, {
-    requireAuth: true,
+    requireAuth: false,
     enabled: true,
   });
 
