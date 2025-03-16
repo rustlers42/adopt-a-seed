@@ -1,6 +1,4 @@
 import logging
-import os
-import signal
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -23,23 +21,9 @@ def create_db_and_tables():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logging.info("lifespan called")
-    try:
-        """
-        create a new process group, all
-        subprocess will inherit this.
-        """
-        os.setsid()
-        create_db_and_tables()
-
-        yield
-
-        """
-        terminate the entire group 
-        (including subprocesses)
-        """
-        os.killpg(os.getpgrp(), signal.SIGTERM)
-    except Exception as e:
-        print(f"Error: {str(e)}")
+    create_db_and_tables()
+    yield
+    logging.info("lifespan ending")
 
 
 app = FastAPI(title="adopt-a-seed-api", lifespan=lifespan)
