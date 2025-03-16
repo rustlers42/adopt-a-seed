@@ -1,8 +1,8 @@
 ﻿"use client";
 
-import { useFetchApi } from "@/lib/use-api";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useFetchApi } from "@/lib/use-api";
 
 type UserScore = {
   username: string;
