@@ -9,7 +9,7 @@ interface EventEntryProps {
 
 const EventEntry: React.FC<EventEntryProps> = ({ event }) => {
   const descriptionWithPlant =
-    event?.plant_id !== null ? `${event?.event_description} for plant ${event?.plant_id}` : event?.event_description;
+    event?.plant_id !== null ? `Plant ${event?.plant_id}: ${event?.event_description}` : event?.event_description;
 
   const content = event ? (
     <>
