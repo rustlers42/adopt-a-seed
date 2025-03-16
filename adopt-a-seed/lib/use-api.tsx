@@ -25,18 +25,10 @@ export function useApi<T>(url: string, options: ApiOptions = {}) {
   const { method = "GET", body, headers = {}, requireAuth = true, enabled = true } = options;
 
   const fetchData = useCallback(async (): Promise<T | null> => {
-    // Skip if not enabled or if auth is required but user is not authenticated
-    if (!enabled || (requireAuth && !isAuthenticated)) {
+    if (!enabled || (requireAuth && !isAuthenticated) || requestInProgress.current) {
       return null;
     }
 
-    // Skip if a request is already in progress
-    if (requestInProgress.current) {
-      console.log("Request already in progress, skipping");
-      return null;
-    }
-
-    // Mark that a request is in progress
     requestInProgress.current = true;
     setIsLoading(true);
     setError(null);
@@ -79,15 +71,13 @@ export function useApi<T>(url: string, options: ApiOptions = {}) {
       return result;
     } catch (err) {
       console.error("API request failed:", err);
-      const errorObj = err instanceof Error ? err : new Error(String(err));
-      setError(errorObj);
+      setError(err instanceof Error ? err : new Error(String(err)));
       return null;
     } finally {
       setIsLoading(false);
-      // Mark that the request is no longer in progress
       requestInProgress.current = false;
     }
-  }, [url, method, body, JSON.stringify(headers), requireAuth, enabled, isAuthenticated, getToken, logout, router]);
+  }, [url, JSON.stringify(headers), requireAuth, enabled, getToken, isAuthenticated, logout]); // Removed `method`, `body`, and `router` if they don't change often.
 
   return {
     data,
