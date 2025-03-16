@@ -80,7 +80,7 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
                 <Image
-                  src="/placeholder.svg?height=600&width=600"
+                  src="/landing-page-image.webp?height=600&width=600"
                   alt="Features"
                   width={600}
                   height={600}
