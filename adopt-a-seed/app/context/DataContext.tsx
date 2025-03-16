@@ -1,8 +1,17 @@
-﻿import React, { createContext, useContext, useState, useEffect } from "react";
+﻿import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
-const DataContext = createContext(null);
+interface DataContextType {
+  data: any;
+  isLoading: boolean;
+}
 
-export const DataProvider = ({ children }) => {
+const DataContext = createContext<DataContextType | null>(null);
+
+interface DataProviderProps {
+  children: ReactNode;
+}
+
+export const DataProvider = ({ children }: DataProviderProps) => {
   const [data, setData] = useState(null);
   const [isLoading, setLoading] = useState(true);
 
