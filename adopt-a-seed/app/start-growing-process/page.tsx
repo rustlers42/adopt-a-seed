@@ -3,8 +3,10 @@
 import { Combobox, ComboxOption } from "@/components/combobox";
 import { DatePicker } from "@/components/date-picker";
 import { Button } from "@/components/ui/button";
-import { getUniqueSeedDatabases, getUniqueSeeds } from "@/lib/seed-database";
+import { SeedDatabaseDTO } from "@/lib/seed-database";
 import { useState } from "react";
+import { useFetchApi } from "@/lib/use-api";
+import { SeedDTO } from "@/lib/seed";
 
 function makeComboboxOptionFromStringArray(arr: string[]): ComboxOption[] {
   return arr.map((item) => ({
@@ -14,12 +16,18 @@ function makeComboboxOptionFromStringArray(arr: string[]): ComboxOption[] {
 }
 
 export default function StartGrowingProcessPage() {
-  const seeds: ComboxOption[] = makeComboboxOptionFromStringArray(getUniqueSeeds());
+  const { data: seedDatabases } = useFetchApi<SeedDatabaseDTO[]>(`http://localhost:8000/seed_databases/seeds`, {
+    requireAuth: true,
+    enabled: true,
+  });
 
-  const seedDatabases: ComboxOption[] = makeComboboxOptionFromStringArray(getUniqueSeedDatabases());
+  const { data: seeds } = useFetchApi<SeedDTO[]>(`http://localhost:8000/seeds`, {
+    requireAuth: true,
+    enabled: true,
+  });
 
-  const [selectedSeed, setSelectedSeed] = useState<ComboxOption | null>(null);
-  const [selectedSeedDatabase, setSelectedSeedDatabase] = useState<ComboxOption | null>(null);
+  const [, setSelectedSeed] = useState<ComboxOption | null>(null);
+  const [, setSelectedSeedDatabase] = useState<ComboxOption | null>(null);
 
   const handleSeedChange = (seed: ComboxOption) => {
     setSelectedSeed(seed);
@@ -36,15 +44,21 @@ export default function StartGrowingProcessPage() {
   };
 
   return (
-    <>
+    <div className={"container mx-auto py-8"}>
       <div>
         <div>seed</div>
-        <Combobox options={seeds} onSelect={handleSeedChange} />
+        <Combobox
+          options={makeComboboxOptionFromStringArray(seeds?.map((x) => x.specific_name) ?? [])}
+          onSelect={handleSeedChange}
+        />
       </div>
 
       <div>
         <div>seed database</div>
-        <Combobox options={seedDatabases} onSelect={handleSeedDatabaseChange} />
+        <Combobox
+          options={makeComboboxOptionFromStringArray(seedDatabases?.map((x) => x.name) ?? [])}
+          onSelect={handleSeedDatabaseChange}
+        />
       </div>
 
       <div>
@@ -55,6 +69,6 @@ export default function StartGrowingProcessPage() {
       <div>
         <Button variant="default">start growing</Button>
       </div>
-    </>
+    </div>
   );
 }
