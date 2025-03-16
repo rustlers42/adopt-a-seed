@@ -4,6 +4,8 @@ from sqlmodel import Session, select
 
 from ..database import get_session
 from ..models import Event, Plant, Seed, SeedDatabase, User
+from ..models.EventType import EventType
+from ..models.PlantStatus import PlantStatus
 from ..oauth2_helper import get_current_user
 
 router = APIRouter()
@@ -79,11 +81,25 @@ async def post_plant(
     """
     Create a new plant
     """
-    db_plant = Plant(**plant.dict(), user_id=current_user.id)
-    session.add(db_plant)
+    new_plant = Plant(
+        **plant.model_dump(),
+        user_id=current_user.id,
+        current_status=PlantStatus.GERMINATION,
+    )
+
+    session.add(new_plant)
     session.commit()
-    session.refresh(db_plant)
-    return db_plant
+    session.refresh(new_plant)
+    new_event = Event(
+        user_id=current_user.id,
+        plant_id=new_plant.id,
+        event_type=EventType.GROWING,
+        event_date=new_plant.planted_at,
+        event_description=f"Change status to {PlantStatus.GERMINATION.value}",
+    )
+    session.add(new_event)
+    session.commit()
+    return new_plant
 
 
 @router.get("/{plant_id}", response_model=PlantResponse)
