@@ -60,7 +60,7 @@ class PlantStatusRequest(BaseModel):
 
 class PlantStatusResponse(PlantStatusRequest):
     current_status: str
-    next_status: str
+    next_status: str | None
 
 
 class PlantStatusUpdateResponse(BaseModel):
