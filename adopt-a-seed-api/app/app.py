@@ -14,8 +14,6 @@ from .models.User import User
 from .oauth2_helper import get_password_hash
 from .routers import router as api_router
 
-logging.getLogger().setLevel(logging.INFO)
-
 app = FastAPI(title="adopt-a-seed-api")
 
 app.add_middleware(
