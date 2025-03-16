@@ -9,6 +9,8 @@ import { PlantDTO } from "@/lib/plant";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { TreesIcon as Plant, Smile, Meh, Frown, Laugh, Skull } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 
 interface PlantPageProps {
   id: string;
@@ -22,7 +24,7 @@ type Question = {
 
 type PlantStatusDTO = {
   questions: Question[];
-  otp_question: Question;
+  otp_question: Question | null;
   current_status: string;
   next_status: string;
 };
@@ -32,6 +34,8 @@ export default function PlantSurvey({ id }: PlantPageProps) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  const [otpValue, setOtpValue] = useState("");
 
   const { data: status } = useFetchApi<PlantStatusDTO>(`http://localhost:8000/plants/${id}/status`, {
     requireAuth: true,
@@ -68,6 +72,12 @@ export default function PlantSurvey({ id }: PlantPageProps) {
         ...q,
         answer: answers[q.id] || null,
       })),
+      otp_question: status.otp_question
+        ? {
+            ...status.otp_question,
+            answer: otpValue,
+          }
+        : null,
     };
   };
 
@@ -145,6 +155,30 @@ export default function PlantSurvey({ id }: PlantPageProps) {
           </div>
         </div>
       ))}
+
+      {status.otp_question && (
+        <div className="mb-4">
+          <h2>{status.otp_question.question}</h2>
+          <InputOTP
+            maxLength={6}
+            value={otpValue}
+            onChange={(value) => setOtpValue(value)}
+            pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
+          >
+            <InputOTPGroup>
+              <InputOTPSlot index={0} />
+              <InputOTPSlot index={1} />
+              <InputOTPSlot index={2} />
+            </InputOTPGroup>
+            <InputOTPSeparator />
+            <InputOTPGroup>
+              <InputOTPSlot index={3} />
+              <InputOTPSlot index={4} />
+              <InputOTPSlot index={5} />
+            </InputOTPGroup>
+          </InputOTP>
+        </div>
+      )}
 
       <div className="flex space-x-2 mt-4">
         <Button onClick={handleSubmit} className="bg-green-500 text-white" disabled={isSubmitting}>
