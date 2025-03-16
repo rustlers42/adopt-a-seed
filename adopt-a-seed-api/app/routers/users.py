@@ -21,11 +21,12 @@ class UserScoreResponse(BaseModel):
 
 
 @router.get("/scores", response_model=list[UserScoreResponse])
-async def get_users_scores(*, session=Depends(get_session)):
+async def get_users_scores(*, session=Depends(get_session), order: str = "desc"):
     """
     Get all users and their scores
     """
-    all_users = session.exec(select(User)).all()
+    order_by_clause = User.score.desc() if order == "desc" else User.score.asc()
+    all_users = session.exec(select(User).order_by(order_by_clause)).all()
     return [
         UserScoreResponse(username=user.username, score=user.score)
         for user in all_users
@@ -48,13 +49,18 @@ async def get_users_me(*, current_user: User = Depends(get_current_user)):
 async def get_users_me_events(
     *,
     session: Session = Depends(get_session),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
+    order: str = "desc"
 ):
     """
     Get the events of the current user
     """
-    return session.exec(
+    order_by_clause = (
+        Event.event_date.desc() if order == "desc" else Event.event_date.asc()
+    )
+    events = session.exec(
         select(Event)
         .where(or_(Event.user_id == current_user.id, Event.user_id == None))
-        .order_by(Event.event_date)
+        .order_by(order_by_clause)
     ).all()
+    return events

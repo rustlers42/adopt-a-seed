@@ -138,14 +138,18 @@ async def put_plant(
 @router.get("/{plant_id}/events", response_model=list[Event])
 async def get_users_me_events(
     plant_id: int,
+    order: str = "desc",
     session: Session = Depends(get_session),
     current_user: User = Depends(get_current_user),
 ):
     """
     Get the events of the current user
     """
+    order_by_clause = (
+        Event.event_date.desc() if order == "desc" else Event.event_date.asc()
+    )
     return session.exec(
         select(Event)
         .where(Event.user_id == current_user.id, Event.plant_id == plant_id)
-        .order_by(Event.event_date)
+        .order_by(order_by_clause)
     ).all()
