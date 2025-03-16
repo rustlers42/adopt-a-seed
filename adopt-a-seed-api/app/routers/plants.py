@@ -412,7 +412,7 @@ async def post_plant_status(
     logging.debug(f"average score: {avaerage_score}")
     if avaerage_score < 3 and (
         plant_status_request.otp_question is None
-        or plant_status_request.otp_question == "000000"
+        or plant_status_request.otp_question.answer == "000000"
     ):
         is_transitioned = True
         # initiate the transition to the next status
