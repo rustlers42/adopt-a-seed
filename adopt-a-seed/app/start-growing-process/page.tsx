@@ -16,6 +16,7 @@ import { useFetchApi } from "@/lib/use-api";
 import { useAuth } from "@/lib/auth-context";
 import { postData } from "@/lib/api-helpers";
 import ProtectedRoute from "@/components/protected-route";
+import { PlantDTO } from "@/lib/plant";
 
 export default function StartGrowingProcessPage() {
   const router = useRouter();
@@ -84,7 +85,7 @@ export default function StartGrowingProcessPage() {
       };
 
       // Make POST request using our helper
-      const result = await postData("http://localhost:8000/plants", requestData, token || undefined);
+      const result = await postData<PlantDTO>("http://localhost:8000/plants", requestData, token || undefined);
 
       if (result.error) {
         setError(result.error);
@@ -92,7 +93,7 @@ export default function StartGrowingProcessPage() {
         setSuccess("Growing process started successfully!");
         // Optionally redirect after success
         setTimeout(() => {
-          router.push("/");
+          router.push(`/view-grow-information/${result.data?.id}`);
         }, 2000);
       }
     } catch (err) {
