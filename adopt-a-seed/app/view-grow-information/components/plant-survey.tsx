@@ -1,17 +1,31 @@
 "use client";
 
+import { Skeleton } from "@/components/ui/skeleton";
+
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { useFetchApi } from "@/lib/use-api";
 import { useAuth } from "@/lib/auth-context";
 import { postData } from "@/lib/api-helpers";
-import { PlantDTO } from "@/lib/plant";
+import type { PlantDTO } from "@/lib/plant";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { TreesIcon as Plant, Smile, Meh, Frown, Laugh, Skull } from "lucide-react";
-import { Spinner } from "@/components/ui/spinner";
+import {
+  TreesIcon as Plant,
+  Smile,
+  Meh,
+  Frown,
+  Laugh,
+  Skull,
+  CheckCircle2Icon,
+  AlertCircleIcon,
+  Loader2Icon,
+} from "lucide-react";
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import { useRouter } from "next/navigation";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/ui/label";
 
 interface PlantPageProps {
   id: string;
@@ -40,7 +54,7 @@ export default function PlantSurvey({ id }: PlantPageProps) {
 
   const [otpValue, setOtpValue] = useState("");
 
-  const { data: status } = useFetchApi<PlantStatusDTO>(`http://localhost:8000/plants/${id}/status`, {
+  const { data: status, isLoading } = useFetchApi<PlantStatusDTO>(`http://localhost:8000/plants/${id}/status`, {
     requireAuth: true,
     enabled: true,
   });
@@ -104,7 +118,7 @@ export default function PlantSurvey({ id }: PlantPageProps) {
       if (result.error) {
         setError(result.error);
       } else {
-        setSuccess("Successfully submitted!");
+        setSuccess("Status updated successfully!");
 
         setTimeout(() => {
           router.refresh();
@@ -118,86 +132,164 @@ export default function PlantSurvey({ id }: PlantPageProps) {
     }
   };
 
-  if (status && status?.questions.length === 0) return <></>;
-
-  if (!status) return <div>Loading Survey...</div>;
-
-  return (
-    <div className="border p-4 relative">
-      {isSubmitting && (
-        <div className="absolute inset-0 flex justify-center items-center z-10 bg-black/30">
-          <Spinner /> {/* Spinner component */}
-        </div>
-      )}
-
-      {error && (
-        <Alert variant="destructive">
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-
-      {success && (
-        <Alert className="bg-green-50 border-green-200">
-          <Plant className="h-4 w-4 text-green-600" />
-          <AlertTitle>Success</AlertTitle>
-          <AlertDescription>{success}</AlertDescription>
-        </Alert>
-      )}
-
-      {!success &&
-        status.questions.map((question) => (
-          <div key={question.id} className="mb-4">
-            <h2>{question.question}</h2>
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Plant Status Survey</CardTitle>
+          <CardDescription>Loading survey questions...</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Skeleton className="h-5 w-3/4" />
             <div className="flex space-x-4">
-              {["1", "2", "3", "4", "5"].map((value) => {
-                const Icon = getIconForValue(value); // Get corresponding icon for value
-                return (
-                  <div
-                    key={value}
-                    className={`cursor-pointer ${answers[question.id] === value ? "text-blue-600" : ""}`}
-                    onClick={() => handleAnswerChange(question.id, value)}
-                  >
-                    <Icon className="h-8 w-8" />
-                  </div>
-                );
-              })}
+              {[1, 2, 3, 4, 5].map((i) => (
+                <Skeleton key={i} className="h-8 w-8 rounded-full" />
+              ))}
             </div>
           </div>
-        ))}
+          <Separator />
+          <div className="space-y-2">
+            <Skeleton className="h-5 w-3/4" />
+            <div className="flex space-x-4">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <Skeleton key={i} className="h-8 w-8 rounded-full" />
+              ))}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
-      {!success && status.otp_question && (
-        <div className="mb-4">
-          <h2>{status.otp_question.question}</h2>
-          <InputOTP
-            maxLength={6}
-            value={otpValue}
-            onChange={(value) => setOtpValue(value)}
-            pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
-          >
-            <InputOTPGroup>
-              <InputOTPSlot index={0} />
-              <InputOTPSlot index={1} />
-              <InputOTPSlot index={2} />
-            </InputOTPGroup>
-            <InputOTPSeparator />
-            <InputOTPGroup>
-              <InputOTPSlot index={3} />
-              <InputOTPSlot index={4} />
-              <InputOTPSlot index={5} />
-            </InputOTPGroup>
-          </InputOTP>
+  if (!status || status?.questions.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Plant Status Survey</CardTitle>
+          <CardDescription>No survey questions available at this time</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">
+            There are no status questions for this plant at its current growth stage. Check back later as your plant
+            continues to grow.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="relative overflow-hidden">
+      {isSubmitting && (
+        <div className="absolute inset-0 flex justify-center items-center z-10 bg-black/20 backdrop-blur-sm">
+          <div className="bg-white p-6 rounded-lg shadow-lg flex items-center gap-3">
+            <Loader2Icon className="h-6 w-6 animate-spin text-green-600" />
+            <span>Updating plant status...</span>
+          </div>
         </div>
       )}
+
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Plant className="h-5 w-5 text-green-600" />
+          Plant Status Survey
+        </CardTitle>
+        <CardDescription>Help us track your plant's progress by answering these questions</CardDescription>
+      </CardHeader>
+
+      <CardContent className="space-y-6">
+        {error && (
+          <Alert variant="destructive">
+            <AlertCircleIcon className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        {success && (
+          <Alert className="bg-green-50 border-green-200">
+            <CheckCircle2Icon className="h-4 w-4 text-green-600" />
+            <AlertTitle>Success</AlertTitle>
+            <AlertDescription>{success}</AlertDescription>
+          </Alert>
+        )}
+
+        {!success && (
+          <>
+            {status.questions.map((question, index) => (
+              <div key={question.id} className="space-y-3">
+                {index > 0 && <Separator />}
+                <Label className="text-base font-medium">{question.question}</Label>
+                <div className="flex justify-between items-center mt-2 bg-slate-50 p-3 rounded-md">
+                  {["1", "2", "3", "4", "5"].map((value) => {
+                    const Icon = getIconForValue(value);
+                    const isSelected = answers[question.id] === value;
+                    return (
+                      <div
+                        key={value}
+                        className={`flex flex-col items-center gap-1 cursor-pointer transition-all p-2 rounded-md
+                          ${isSelected ? "bg-green-100 text-green-700 scale-110 shadow-sm" : "hover:bg-slate-100"}`}
+                        onClick={() => handleAnswerChange(question.id, value)}
+                      >
+                        <Icon className={`h-8 w-8 ${getIconColor(value)}`} />
+                        <span className="text-xs font-medium">{getRatingLabel(value)}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+
+            {status.otp_question && (
+              <div className="space-y-3 pt-2">
+                <Separator />
+                <Label className="text-base font-medium">{status.otp_question.question}</Label>
+                <div className="flex justify-center my-4">
+                  <InputOTP
+                    maxLength={6}
+                    value={otpValue}
+                    onChange={(value) => setOtpValue(value)}
+                    pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
+                    className="gap-2"
+                  >
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} className="border-green-200" />
+                      <InputOTPSlot index={1} className="border-green-200" />
+                      <InputOTPSlot index={2} className="border-green-200" />
+                    </InputOTPGroup>
+                    <InputOTPSeparator />
+                    <InputOTPGroup>
+                      <InputOTPSlot index={3} className="border-green-200" />
+                      <InputOTPSlot index={4} className="border-green-200" />
+                      <InputOTPSlot index={5} className="border-green-200" />
+                    </InputOTPGroup>
+                  </InputOTP>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </CardContent>
 
       {!success && (
-        <div className="flex space-x-2 mt-4">
-          <Button onClick={handleSubmit} className="bg-green-500 text-white" disabled={isSubmitting}>
-            Submit
+        <CardFooter className="flex justify-end border-t pt-4 bg-slate-50">
+          <Button onClick={handleSubmit} className="bg-green-600 hover:bg-green-700 text-white" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              <>
+                <CheckCircle2Icon className="mr-2 h-4 w-4" />
+                Submit Survey
+              </>
+            )}
           </Button>
-        </div>
+        </CardFooter>
       )}
-    </div>
+    </Card>
   );
 }
 
@@ -216,5 +308,41 @@ const getIconForValue = (value: string) => {
       return Skull; // Unhappy (Worst)
     default:
       return Smile;
+  }
+};
+
+// Helper function to get color for each icon
+const getIconColor = (value: string) => {
+  switch (value) {
+    case "1":
+      return "text-green-600";
+    case "2":
+      return "text-emerald-500";
+    case "3":
+      return "text-amber-500";
+    case "4":
+      return "text-orange-500";
+    case "5":
+      return "text-red-500";
+    default:
+      return "text-slate-500";
+  }
+};
+
+// Helper function to get label for each rating
+const getRatingLabel = (value: string) => {
+  switch (value) {
+    case "1":
+      return "Excellent";
+    case "2":
+      return "Good";
+    case "3":
+      return "Average";
+    case "4":
+      return "Poor";
+    case "5":
+      return "Critical";
+    default:
+      return "";
   }
 };

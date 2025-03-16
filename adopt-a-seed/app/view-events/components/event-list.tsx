@@ -1,29 +1,52 @@
-import { EventDTO } from "@/lib/event";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import EventEntry from "./event-entry";
+"use client";
+
+import type { EventDTO } from "@/lib/event";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { format } from "date-fns";
+import { CalendarIcon, MessageSquareIcon } from "lucide-react";
 
 interface EventListProps {
   events: EventDTO[] | null;
+  header: string | null;
 }
 
-const EventList: React.FC<EventListProps> = ({ events }) => {
-  if (events != null && events.length == 0) {
-    return <></>;
+export default function EventList({ events, header }: EventListProps) {
+  if (!events || events.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Growth Events</CardTitle>
+        </CardHeader>
+        <CardContent>No events recorded for this plant.</CardContent>
+      </Card>
+    );
   }
 
   return (
-    <>
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">Events</h1>
+    <div className={!header ? "py-4" : ""}>
+      <Card>
+        {header && (
+          <CardHeader>
+            <CardTitle>{header}</CardTitle>
+          </CardHeader>
+        )}
 
-      <ScrollArea className="h-96 w-full rounded-lg p-2">
-        <div className="space-y-2">
-          {events
-            ? events.map((event) => <EventEntry key={event.id} event={event} />)
-            : Array.from({ length: 5 }).map((_, index) => <EventEntry key={index} event={null} />)}
-        </div>
-      </ScrollArea>
-    </>
+        <CardContent className="space-y-4">
+          {events.map((event) => (
+            <div key={event.id} className="border rounded-md p-4">
+              <p className="text-sm mb-2">{event.event_description}</p>
+              <div className="flex items-center space-x-2 mb-2">
+                <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground flex-1">
+                  {format(new Date(event.event_date), "PPP")}
+                </span>
+                <MessageSquareIcon className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">{event.event_type}</span>
+              </div>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+    </div>
   );
-};
-
-export default EventList;
+}
