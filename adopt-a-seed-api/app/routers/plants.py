@@ -351,6 +351,7 @@ async def post_plant_status(
                     seed_specific: {plant.specific_name}
                     current_status: {current_status}
                     next_status: {next_status}
+                    user_koppen_climate_classification: {current_user.koppen_climate_classification}
                     questions: {plant_status.questions}
                 """,
         },
@@ -374,6 +375,7 @@ async def post_plant_status(
                     seed_specific: {plant.specific_name}
                     current_status: {current_status}
                     next_status: {next_status}
+                    user_koppen_climate_classification: {current_user.koppen_climate_classification}
                     questions: {plant_status.questions}
                 """,
         },
@@ -471,7 +473,7 @@ async def get_plant_help(
     messages = [
         {
             "role": "system",
-            "content": "You are an expert assistant providing advice on plant cultivation. You will receive a chronological list of events related to a plant's growth process. Based on this event history, provide concise, actionable recommendations highlighting areas for potential improvement. Offer general suggestions without overly detailed or specific instructions. Do not ask any follow-up questions.",
+            "content": "You are an expert assistant providing advice on plant cultivation. You will receive a chronological list of events related to a plant's growth process. Based on this event history, your about the plant and the climate based on the koppen_climate_classification provide concise, actionable recommendations highlighting areas for potential improvement. Offer general suggestions. Do not ask any follow-up questions.",
         },
         {
             "role": "user",
@@ -480,6 +482,7 @@ async def get_plant_help(
                     seed_category: {plant.category}
                     seed_specific: {plant.specific_name}
                     current_status: {plant.current_status}
+                    user_koppen_climate_classification: {current_user.koppen_climate_classification}
                     events: {events}
                 """,
         },
