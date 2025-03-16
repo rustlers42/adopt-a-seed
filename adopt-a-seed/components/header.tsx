@@ -56,16 +56,13 @@ export default function Header() {
 
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            {isAuthenticated ? (
-              isLoading ? (
+            {isAuthenticated &&
+              (isLoading ? (
                 <Skeleton className="h-6 w-12" />
               ) : (
                 <span className="font-medium">{userProfile?.score || 0}</span>
-              )
-            ) : (
-              <span className="font-medium">0</span>
-            )}
-            <Seedling className="h-5 w-5" aria-hidden="true" />
+              ))}
+            {isAuthenticated && <Seedling className="h-5 w-5" aria-hidden="true" />}
           </div>
 
           {isAuthenticated ? (
