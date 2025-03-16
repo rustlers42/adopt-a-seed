@@ -51,6 +51,11 @@ export default function Header() {
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>Seed Databases</NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/view-leaderboard" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Leaderboard</NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
 
