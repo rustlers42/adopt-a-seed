@@ -46,6 +46,10 @@ class Question(BaseModel):
     answer: QuestionAnswer | str | None
 
 
+class PlantStatusHelpResponse(BaseModel):
+    text: str
+
+
 class PlantStatusRequest(BaseModel):
     questions: list[Question]
     otp_question: Question | None
@@ -448,7 +452,7 @@ async def post_plant_status(
     )
 
 
-@router.get("/{plant_id}/help")
+@router.get("/{plant_id}/help", response_model=PlantStatusHelpResponse)
 async def get_plant_help(
     plant_id: int,
     session: Session = Depends(get_session),
@@ -493,7 +497,7 @@ async def get_plant_help(
     )
     messages_telemetry: str = response["message"]["content"].strip()
 
-    return Response(content=messages_telemetry, status_code=status.HTTP_200_OK)
+    return PlantStatusHelpResponse(text=messages_telemetry)
 
 
 @router.get("/{plant_id}/events", response_model=list[Event])
