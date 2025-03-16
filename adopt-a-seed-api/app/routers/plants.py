@@ -1,7 +1,7 @@
 import enum
 from datetime import date
 
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Response, status
 from pydantic import BaseModel
 from sqlmodel import Session, select, update
 
@@ -266,6 +266,9 @@ async def get_plant(
         .join(Seed, Plant.seed_id == Seed.id)
         .join(SeedDatabase, Plant.seed_database_id == SeedDatabase.id, isouter=True)
     ).first()
+    if plant is None:
+        # plant does not count for the user return 404 not found
+        return Response(status_code=status.HTTP_404_NOT_FOUND)
     return PlantResponse(
         id=plant.id,
         seed_category=plant.category,
@@ -280,23 +283,26 @@ async def get_plant(
 @router.put("/{plant_id}", response_model=Plant)
 async def put_plant(
     plant_id: int,
-    plant: PlantRequest,
+    plant_request: PlantRequest,
     session: Session = Depends(get_session),
     current_user: User = Depends(get_current_user),
 ):
     """
     Update a plant
     """
-    db_plant = session.get(Plant, plant_id)
+    plant = session.get(Plant, plant_id)
+    if plant is None:
+        # plant does not count for the user return 404 not found
+        return Response(status_code=status.HTTP_404_NOT_FOUND)
 
-    db_plant.seed_id = plant.seed_id
-    db_plant.seed_database_id = plant.seed_database_id
-    db_plant.planted_at = plant.planted_at
+    plant.seed_id = plant_request.seed_id
+    plant.seed_database_id = plant_request.seed_database_id
+    plant.planted_at = plant_request.planted_at
 
-    session.add(db_plant)
+    session.add(plant)
     session.commit()
-    session.refresh(db_plant)
-    return db_plant
+    session.refresh(plant)
+    return plant
 
 
 @router.get("/{plant_id}/status", response_model=PlantStatusResponse)
@@ -311,6 +317,9 @@ async def get_plant_status(
     plant = session.exec(
         select(Plant).where(Plant.user_id == current_user.id, Plant.id == plant_id)
     ).first()
+    if plant is None:
+        # plant does not count for the user return 404 not found
+        return Response(status_code=status.HTTP_404_NOT_FOUND)
     next_status = plant.current_status.get_next_status()
     question_ids = question_catalog.get(next_status, [])
     questions_to_answer = [q for q in questions if q.id in question_ids]
@@ -341,7 +350,9 @@ async def post_plant_status(
         .where(Plant.id == plant_id)
         .join(Seed, Seed.id == Plant.id)
     ).first()
-
+    if plant is None:
+        # plant does not count for the user return 404 not found
+        return Response(status_code=status.HTTP_404_NOT_FOUND)
     current_status = plant.current_status
     next_status = current_status.get_next_status()
 
@@ -447,6 +458,9 @@ async def get_plant_help(
         .where(Plant.id == plant_id)
         .join(Seed, Seed.id == Plant.seed_id)
     ).first()
+    if plant is None:
+        # plant does not count for the user return 404 not found
+        return Response(status_code=status.HTTP_404_NOT_FOUND)
     events = session.exec(
         select(Event)
         .where(Event.user_id == current_user.id, Event.plant_id == plant_id)

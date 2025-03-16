@@ -422,7 +422,9 @@ def setup_mock_data(session: Session):
                 random_statuses = random.sample(plant_statuses, 5)
 
                 for seed, status in zip(selected_seeds, random_statuses):
-                    planting_base_date = date(2024, 11, random.randint(1, 30))
+                    planting_base_date = date(
+                        2024, random.randint(9, 11), random.randint(1, 28)
+                    )
                     planted_at = (
                         None
                         if status == PlantStatus.PENDING
@@ -443,11 +445,11 @@ def setup_mock_data(session: Session):
                     # Generate realistic events if not pending
                     if status != PlantStatus.PENDING:
                         event_dates = {
-                            PlantStatus.GERMINATION: random.randint(3, 7),
-                            PlantStatus.SEEDLING: random.randint(10, 20),
-                            PlantStatus.VEGETATIVE_PHASE: random.randint(30, 40),
-                            PlantStatus.REPRODUCTIVE_PHASE: random.randint(60, 85),
-                            PlantStatus.RETURNED_SEEDS: random.randint(95, 180),
+                            PlantStatus.GERMINATION: random.randint(3, 5),
+                            PlantStatus.SEEDLING: random.randint(7, 15),
+                            PlantStatus.VEGETATIVE_PHASE: random.randint(19, 28),
+                            PlantStatus.REPRODUCTIVE_PHASE: random.randint(42, 70),
+                            PlantStatus.RETURNED_SEEDS: random.randint(80, 99),
                         }
 
                         status_order = [
