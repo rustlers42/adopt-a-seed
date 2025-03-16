@@ -1,92 +1,96 @@
-# adopt-a-seed
+# adopt-a-seed 🌱
 
-## Frontend
+## Overview
 
-[Frontend README](./adopt-a-seed/README.md)
+Adopt-a-Seed is a platform that promotes sustainable gardening by enabling users to adopt, grow, and return seeds. It integrates AI-generated insights, community engagement, and seed-tracking features to encourage biodiversity, food security, and climate-conscious planting.
 
-## Backend
+## Getting Started
 
-[Backend README](./adopt-a-seed-api/README.md)
+### Start Everything with a Single Command
 
-## Additional Services
-
-- [Ollama](https://ollama.com)
-
-## Start Everything with a Single Command
-
-For simplicity, there is a single command to start everything. This command will start the frontend, backend, and additional services. It will also build the frontend and backend images.
+To simplify setup, use the following command to start the frontend, backend, and additional services. This will also build the required Docker images.
 
 ```bash
 docker compose up --build
 ```
 
-## UN SDG Goals we are aiming for
+### Project Structure
 
-### Zero Hunger
+- **Frontend** – [README](./adopt-a-seed/README.md)
+- **Backend** – [README](./adopt-a-seed-api/README.md)
+- **Additional Services** – [Ollama](https://ollama.com)
 
-"End hunger, achieve food security and improved nutrition, and promote sustainable agriculture"
+## Our Impact: UN SDG Goals
 
-- **Seed Adoption and Distribution**: Facilitates easier access to diverse, nutritious plants, potentially increasing food security through household or community gardening.
-- **AI-generated Growing Tips**: Equips users with personalized information to grow edible plants more effectively, improving nutrition and yield.
-- **Climate-Based Seed Recommendations**: Matching seeds to the user's Köppen climate classification ensures higher success rates, maximizing crop yields and minimizing resource waste.
+### 🌾 Zero Hunger
 
-### Sustainable Cities and Communities
+_"End hunger, achieve food security, and promote sustainable agriculture."_
 
-"Make cities and settlements inclusive, safe, resilient and sustainable"
+- **Seed Adoption & Distribution** – Increases access to diverse, nutritious plants for community and home gardening.
+- **Seed Adaptation & Strengthening** – Users help develop resilient seeds by returning adapted variants.
+- **AI-Guided Growing Tips** – Personalized recommendations improve plant health and yield.
+- **Climate-Based Seed Matching** – Köppen climate classification ensures high success rates and resource efficiency.
 
-- **Community Engagement through Leaderboard and Events**: Promotes sustainable urban gardening practices by engaging community members, encouraging participation, and fostering urban green spaces.
-- **Plant Tracking and Reward System**: Incentivizes continuous user engagement, increasing sustainability awareness and long-term commitment to greener urban living.
+### 🏙 Sustainable Cities & Communities
 
-### Life on Land
+_"Make cities and settlements inclusive, safe, resilient, and sustainable."_
 
-"Take urgent action to combat climate change and its impacts"
+- **Community Leaderboard & Events** – Encourages urban gardening and green spaces.
+- **Plant Tracking & Rewards** – Incentivizes long-term sustainability and eco-friendly behavior.
 
-- **AI-generated Climate-Sensitive Telemetry and Tips**: Encourages users to adopt plants suitable for their climate zones, promoting resilience to climate impacts.
-- **Growth State Algorithm**: Encourages sustainable gardening practices and environmental awareness by rewarding user efforts and successful plant management.
-- **User Climate Awareness**: Users learn about their climate classification, raising awareness and informing actions to reduce environmental impact.
+### 🌍 Life on Land
 
-### Climate Action
+_"Protect and restore ecosystems, manage forests sustainably, combat desertification, and halt biodiversity loss."_
 
-"Protect and restore terrestrial ecosystems and promote their sustainable use, manage forests sustainably, combat desertification, stop and reverse land degradation, and stop the loss of biodiversity"
+- **Biodiversity Promotion** – Provides diverse seed databases to preserve plant species.
+- **Adoption & Return System** – Encourages sustainable interaction with plant species.
+- **Seed Tracking & Growth History** – Visualizes individual contributions to ecosystem restoration.
 
-- **Promotion of Biodiversity**: Provides diverse seed databases, enabling users to grow and conserve various plant species.
-- **Adoption and Return System**: Encourages users to sustainably engage with plant species, enhancing the conservation of terrestrial ecosystems.
-- **Seed Tracking and Growth History**: Helps users see their direct impact on plant life, encouraging sustained efforts in biodiversity conservation and restoration efforts.
+### 🌱 Climate Action
 
-## What's Currently Working
+_"Take urgent action to combat climate change and its impacts."_
 
-- [x] Landing page
-- [x] Users can log in (with JWT tokens)
-- [x] Users can log out
-- [x] Guests & Users can see a leaderboard
-- [x] Guests & Users can see all available seed databases and search them
-- [x] Users can see all relevant events for them
-- [x] Users can see growth & telemetry events for selected plants
-- [x] Users can adopt a seed from a seed database
-- [x] Users can adopt a seed they got themselves
-- [x] Users can return a seed
-- [x] Users can see the seeds they have adopted
-- [x] Users can track the progress of the seeds they have adopted
-- [x] Users have a Köppen climate classification
-- [x] Tracking the progress of a plant rewards adopt-a-seed coins
-- [x] Returning a seed rewards adopt-a-seed coins using OTP tokens
-- [x] AI-generated telemetry data based on a survey and user climate zone
-- [x] AI-generated growing tips for users to take care of the seed based on past survey results
-- [x] Algorithm which decides whether the next growth state has been reached
-- [x] Usage of a local Ollama instance
+- **AI-Driven Climate Adaptation** – Helps users plant species suited to their environment.
+- **Growth State Algorithm** – Encourages sustainable gardening through rewarding progress.
+- **Climate Awareness** – Educates users on their local climate conditions and their impact.
 
-## Next Steps
+## Benefits for Seed Databases
 
-- [ ] A login/management system for the seed databases
-- [ ] Seed databases can see the state of all seeds they have given out
-- [ ] Generation of OTP for seed databases (currently 000-000 is always valid)
-- [ ] A detailed view for the seed databases and improved first contact experience
-- [ ] Option to order seeds via mail
-- [ ] A seed recommendation system from the seed database
-- [ ] Recommendations based on the season or the user's location (we already store the climate zone)
-- [ ] A user profile page
-- [ ] Track images of the seeds/plants in the growth history
-- [ ] Signup/Onboarding
-- [ ] Track time of plants
-- [ ] Option to link user account with cryptocurrency wallet
-- [ ] Smart contracts to generate adopt-a-seed cryptocurrency for users
+Seed databases play a crucial role in supporting biodiversity and sustainable agriculture:
+
+- **Biodiversity Conservation** – Provides access to diverse, rare, and native seeds.
+- **Informed Seed Distribution** – AI-driven recommendations optimize plant selection based on climate data.
+- **Data-Driven Insights** – Helps seed providers refine their offerings and contribute to food security.
+- **Enhanced Seed Resilience** – Adapted seeds become stronger and more viable over time.
+- **Community Engagement** – Builds trust through active participation in the adoption cycle.
+
+## What's Working ✅
+
+- **User Features:**
+  - Login/logout (JWT-based authentication)
+  - Leaderboard, event browsing, and seed database search
+  - Seed adoption, tracking, and returning with rewards
+  - Köppen climate classification integration
+  - AI-generated growing tips & telemetry insights
+  - Growth progression algorithm
+  - Adoption rewards via OTP-based coins
+  - Local **Ollama** AI instance for seed recommendations
+
+## Next Steps 🚀
+
+- **For Seed Databases:**
+
+  - Seed management dashboard
+  - Real-time tracking of distributed seeds
+  - OTP-based validation system
+
+- **For Users:**
+
+  - Profile page & onboarding experience
+  - Seed recommendations based on season & location
+  - Image tracking in growth history
+  - Enhanced seed ordering process
+
+- **Future Innovations:**
+  - Cryptocurrency wallet integration
+  - Smart contracts for adopt-a-seed cryptocurrency
