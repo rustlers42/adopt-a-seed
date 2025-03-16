@@ -1,6 +1,5 @@
+﻿import Link from "next/link";
 import { format } from "date-fns";
-import Link from "next/link";
-
 import { PlantDTO } from "@/lib/plant";
 
 interface PlantCardProps {
