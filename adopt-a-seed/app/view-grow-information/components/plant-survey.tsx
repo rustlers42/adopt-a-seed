@@ -5,6 +5,11 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useState, useEffect } from "react";
 import { useFetchApi } from "@/lib/use-api";
+import { useAuth } from "@/lib/auth-context";
+import { postData } from "@/lib/api-helpers";
+import { PlantDTO } from "@/lib/plant";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { TreesIcon as Plant } from "lucide-react";
 
 interface PlantPageProps {
   id: string;
@@ -24,6 +29,11 @@ type PlantStatusDTO = {
 };
 
 export default function PlantSurvey({ id }: PlantPageProps) {
+  const { getToken } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
   const { data: status } = useFetchApi<PlantStatusDTO>(`http://localhost:8000/plants/${id}/status`, {
     requireAuth: true,
     enabled: true,
@@ -63,10 +73,37 @@ export default function PlantSurvey({ id }: PlantPageProps) {
     };
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    // Reset states
+    setError(null);
+    setSuccess(null);
+
     const submissionData = prepareSubmissionData();
-    console.log("Submitting:", submissionData);
-    // TODO api calls to submit answers
+
+    setIsSubmitting(true);
+
+    try {
+      // Get auth token
+      const token = getToken();
+
+      // Make POST request using our helper
+      const result = await postData<PlantDTO>(
+        `http://localhost:8000/plants/${id}/status`,
+        submissionData,
+        token || undefined,
+      );
+
+      if (result.error) {
+        setError(result.error);
+      } else {
+        setSuccess("Successfully submitted!");
+      }
+    } catch (err) {
+      setError("Failed to submit. Please try again.");
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!status || status.questions.length === 0) return <div>Loading...</div>;
@@ -75,6 +112,20 @@ export default function PlantSurvey({ id }: PlantPageProps) {
 
   return (
     <div className="border p-4">
+      {error && (
+        <Alert variant="destructive">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+
+      {success && (
+        <Alert className="bg-green-50 border-green-200">
+          <Plant className="h-4 w-4 text-green-600" />
+          <AlertTitle>Success</AlertTitle>
+          <AlertDescription>{success}</AlertDescription>
+        </Alert>
+      )}
       <h2>{currentQuestion.question}</h2>
       <RadioGroup
         value={answers[currentQuestion.id] || ""}
