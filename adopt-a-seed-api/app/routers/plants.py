@@ -99,6 +99,8 @@ async def post_plant(
     )
     session.add(new_event)
     session.commit()
+    session.refresh(new_plant)
+    
     return new_plant
 
 
