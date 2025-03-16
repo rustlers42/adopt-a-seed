@@ -2,7 +2,7 @@
 
 ## Overview
 
-Adopt-a-Seed is a platform that promotes sustainable gardening by enabling users to adopt, grow, and return seeds. It integrates AI-generated insights, community engagement, and seed-tracking features to encourage biodiversity, food security, and climate-conscious planting.
+adopt-a-seed is a platform that promotes sustainable gardening by enabling users to adopt, grow, and return seeds. It integrates AI-generated insights, community engagement, and seed-tracking features to encourage biodiversity, food security, and climate-conscious planting.
 
 ## Getting Started
 
