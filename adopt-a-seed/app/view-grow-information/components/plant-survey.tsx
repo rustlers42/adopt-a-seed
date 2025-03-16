@@ -3,40 +3,86 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useFetchApi } from "@/lib/use-api";
 
-class PlantHealthQuestion {
-  constructor(
-    public question: string,
-    public answers: string[],
-  ) {}
+interface PlantPageProps {
+  id: string;
 }
 
-export default function PlantSurvey() {
-  const questions = [
-    new PlantHealthQuestion("How does the soil feel when touched?", ["Very Wet", "Wet", "Moist", "Dry"]),
-    new PlantHealthQuestion("Has the plant sprouted yet?", ["Yes", "No"]),
-    // Add more questions as needed
-  ];
+type Question = {
+  id: number;
+  question: string;
+  answer: string | null;
+};
 
-  const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
+type PlantStatusDTO = {
+  questions: Question[];
+  otp_question: Question;
+  current_status: string;
+  next_status: string;
+};
 
-  const handleNext = () => setActiveQuestionIndex((prev) => prev + 1);
-  const handlePrev = () => setActiveQuestionIndex((prev) => prev - 1);
+export default function PlantSurvey({ id }: PlantPageProps) {
+  const { data: status } = useFetchApi<PlantStatusDTO>(`http://localhost:8000/plants/${id}/status`, {
+    requireAuth: true,
+    enabled: true,
+  });
+
+  const [answers, setAnswers] = useState<{ [key: number]: string }>({});
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (status) {
+      const initialAnswers = status.questions.reduce(
+        (acc, q) => {
+          if (q.answer) acc[q.id] = q.answer;
+          return acc;
+        },
+        {} as { [key: number]: string },
+      );
+
+      setAnswers(initialAnswers);
+    }
+  }, [status]);
+
+  const handleAnswerChange = (questionId: number, value: string) => {
+    setAnswers((prev) => ({ ...prev, [questionId]: value }));
+  };
+
+  const handleSubmit = () => {
+    console.log("Submitted answers:", answers);
+    // TODO api calls to submit answers
+  };
+
+  if (!status || status.questions.length === 0) return <div>Loading...</div>;
+
+  const currentQuestion = status.questions[activeIndex];
 
   return (
-    <div className="border">
-      <h2>{questions[activeQuestionIndex].question}</h2>
-      <RadioGroup defaultValue={questions[activeQuestionIndex].answers[0]}>
-        {questions[activeQuestionIndex].answers.map((answer, index) => (
-          <div key={index} className="flex items-center space-x-2">
-            <RadioGroupItem value={answer} id={`r${index}`} />
-            <Label htmlFor={`r${index}`}>{answer}</Label>
+    <div className="border p-4">
+      <h2>{currentQuestion.question}</h2>
+      <RadioGroup
+        value={answers[currentQuestion.id] || ""}
+        onValueChange={(value) => handleAnswerChange(currentQuestion.id, value)}
+      >
+        {["Yes", "No"].map((answer) => (
+          <div key={answer} className="flex items-center space-x-2">
+            <RadioGroupItem value={answer} id={`q${currentQuestion.id}-${answer}`} />
+            <Label htmlFor={`q${currentQuestion.id}-${answer}`}>{answer}</Label>
           </div>
         ))}
       </RadioGroup>
-      {activeQuestionIndex > 0 && <Button onClick={handlePrev}>Previous</Button>}
-      {activeQuestionIndex < questions.length - 1 && <Button onClick={handleNext}>Next</Button>}
+      <div className="flex space-x-2 mt-4">
+        {activeIndex > 0 && <Button onClick={() => setActiveIndex((prev) => prev - 1)}>Previous</Button>}
+        {activeIndex < status.questions.length - 1 ? (
+          <Button onClick={() => setActiveIndex((prev) => prev + 1)}>Next</Button>
+        ) : (
+          <Button onClick={handleSubmit} className="bg-green-500 text-white">
+            Submit
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

@@ -31,7 +31,7 @@ export default function PlantPage({ id }: PlantPageProps) {
         <HelpAlert id={id}></HelpAlert>
         <h1>Plant Information</h1>
         <PlantDetails plant={plant} />
-        <PlantSurvey />
+        <PlantSurvey id={id} />
 
         <EventList events={events}></EventList>
       </div>
