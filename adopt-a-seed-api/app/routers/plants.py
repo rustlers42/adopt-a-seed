@@ -1,7 +1,8 @@
 import enum
+import logging
 from datetime import date
 
-from fastapi import APIRouter, Depends, Response, status
+from fastapi import APIRouter, BackgroundTasks, Depends, Response, status
 from pydantic import BaseModel
 from sqlmodel import Session, select, update
 
@@ -11,7 +12,6 @@ from ..models.EventType import EventType
 from ..models.PlantStatus import PlantStatus
 from ..oauth2_helper import get_current_user
 from ..prompts import (
-    prompt_check_growth_stage_eligibility,
     prompt_general_plant_help_messages,
     prompt_provide_growth_recommendations,
 )
@@ -66,7 +66,6 @@ class PlantStatusResponse(PlantStatusRequest):
 class PlantStatusUpdateResponse(BaseModel):
     increment_score: int
     is_transitioned: bool
-    telemetry: str
 
 
 questions = [
@@ -333,10 +332,32 @@ async def get_plant_status(
     )
 
 
+async def document_telemetry_data(
+    plant_id: int,
+    user_id: int,
+    content: str,
+    session: Session,
+):
+    messages_telemetry = await prompt_provide_growth_recommendations(content)
+
+    # document telemetry data
+    session.add(
+        Event(
+            user_id=user_id,
+            plant_id=plant_id,
+            event_type=EventType.PLANT_TELEMETRY,
+            event_date=date.today().isoformat(),
+            event_description=messages_telemetry,
+        )
+    )
+    session.commit()
+
+
 @router.post("/{plant_id}/status", response_model=PlantStatusUpdateResponse)
 async def post_plant_status(
-    plant_status: PlantStatusRequest,
+    plant_status_request: PlantStatusRequest,
     plant_id: int,
+    background_tasks: BackgroundTasks,
     session: Session = Depends(get_session),
     current_user: User = Depends(get_current_user),
 ) -> Response:
@@ -356,48 +377,35 @@ async def post_plant_status(
     current_status = plant.current_status
     next_status = current_status.get_next_status()
 
-    messages_reccomendation_transition = await prompt_check_growth_stage_eligibility(
+    logging.debug(plant_status_request)
+
+    avaerage_score = sum([int(q.answer) for q in plant_status_request.questions]) / len(
+        plant_status_request.questions
+    )
+
+    background_tasks.add_task(
+        document_telemetry_data,
+        plant_id,
+        current_user.id,
         f"""
             planted_at: {plant.planted_at}
             seed_category: {plant.category}
             seed_specific: {plant.specific_name}
-            current_status: {current_status}
-            next_status: {next_status}
+            current_status: {plant.current_status}
+            next_status: {plant.current_status.get_next_status()}
             user_koppen_climate_classification: {current_user.koppen_climate_classification}
-            questions: {plant_status.questions}
-        """
+            questions: {plant_status_request.questions}
+        """,
+        session,
     )
-
-    messages_telemetry = await prompt_provide_growth_recommendations(
-        f"""
-            planted_at: {plant.planted_at}
-            seed_category: {plant.category}
-            seed_specific: {plant.specific_name}
-            current_status: {current_status}
-            next_status: {next_status}
-            user_koppen_climate_classification: {current_user.koppen_climate_classification}
-            questions: {plant_status.questions}
-        """
-    )
-
-    # document telemetry data
-    session.add(
-        Event(
-            user_id=current_user.id,
-            plant_id=plant_id,
-            event_type=EventType.PLANT_TELEMETRY,
-            event_date=date.today().isoformat(),
-            event_description=messages_telemetry,
-        )
-    )
-    session.commit()
 
     increment_score = 0
     is_transitioned: bool = False
     # check if message contains the word "yes"
-    if (
-        "yes" in messages_reccomendation_transition.lower()
-        and plant_status.otp_question == "000000"
+    logging.debug(f"average score: {avaerage_score}")
+    if avaerage_score < 3 and (
+        plant_status_request.otp_question is None
+        or plant_status_request.otp_question == "000000"
     ):
         is_transitioned = True
         # initiate the transition to the next status
@@ -438,7 +446,6 @@ async def post_plant_status(
     return PlantStatusUpdateResponse(
         increment_score=increment_score,
         is_transitioned=is_transitioned,
-        telemetry=messages_telemetry,
     )
 
 
