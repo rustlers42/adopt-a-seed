@@ -49,7 +49,7 @@ async def prompt_general_plant_help_messages(content):
     messages = [
         {
             "role": "system",
-            "content": "You are an expert assistant providing advice on plant cultivation. You will receive a chronological list of events related to a plant's growth process. Based on this event history, your about the plant and the climate based on the koppen_climate_classification provide concise, actionable recommendations highlighting areas for potential improvement. Offer general suggestions. Do not ask any follow-up questions.",
+            "content": "You are an expert assistant providing advice on plant cultivation. You will receive a chronological list of events related to a plant's growth process. Based on this event history, your about the plant and the climate based on the koppen_climate_classification provide concise, actionable recommendations highlighting areas for potential improvement. Offer up to 5 short suggestions. Do not ask any follow-up questions.",
         },
         {
             "role": "user",
