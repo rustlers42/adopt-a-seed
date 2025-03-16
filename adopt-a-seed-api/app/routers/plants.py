@@ -450,6 +450,11 @@ async def post_plant_status(
         # also let the user gain some score weighted by the next status
         match next_status:
             case PlantStatus.GERMINATION:
+                session.exec(
+                    update(Plant)
+                    .where(Plant.id == plant_id)
+                    .values(planted_at=date.today().isoformat())
+                )
                 increment_score = 10
             case PlantStatus.SEEDLING:
                 increment_score = 20
