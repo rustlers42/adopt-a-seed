@@ -15,6 +15,11 @@ export default function ViewSeedDatabasePage() {
     const expandedEntries = [];
 
     for (const entry of entries) {
+      if (entry.seeds.length === 0) {
+        expandedEntries.push(entry);
+        continue;
+      }
+
       for (const seed of entry.seeds) {
         expandedEntries.push({ ...entry, seeds: [seed] });
       }
