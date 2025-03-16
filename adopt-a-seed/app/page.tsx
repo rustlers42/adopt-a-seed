@@ -10,15 +10,6 @@ export default function LandingPage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative py-20 md:py-28 overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <Image
-              src="/placeholder.svg?height=1080&width=1920"
-              alt="Background"
-              fill
-              className="object-cover opacity-10"
-              priority
-            />
-          </div>
           <div className="container relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center text-center space-y-6 max-w-3xl mx-auto">
               <div className="inline-block rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800 mb-2">
@@ -32,14 +23,10 @@ export default function LandingPage() {
                 more sustainable future.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                {" "}
                 <Button asChild size="lg" className="bg-green-700">
                   <Link href="/login">
                     Get Started <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
-                </Button>
-                <Button size="lg" variant="outline">
-                  Learn More
                 </Button>
               </div>
             </div>
