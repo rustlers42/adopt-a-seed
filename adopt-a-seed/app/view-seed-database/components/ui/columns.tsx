@@ -3,7 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import { SeedDatabaseDTO } from "@/app/view-seed-database/page";
+
+import { SeedDatabaseDTO } from "@/lib/seed-database";
 
 export const columns: ColumnDef<SeedDatabaseDTO>[] = [
   {

@@ -4,3 +4,9 @@ export class Seed {
     public specific: string,
   ) {}
 }
+
+export type SeedDTO = {
+  category: string;
+  id: number;
+  specific_name: string;
+};

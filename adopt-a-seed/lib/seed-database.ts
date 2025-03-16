@@ -1,4 +1,4 @@
-import { Seed } from "./seed";
+import { Seed, SeedDTO } from "./seed";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -53,12 +53,6 @@ const databases = [
   ]),
 ];
 
-export function getSeedDatabaseDummyData(): SeedDatabase[] {
-  return databases.flatMap((database) =>
-    database.seeds.map((seed) => new SeedDatabase(database.name, database.contact, [seed])),
-  );
-}
-
 export function getUniqueSeedDatabases(): string[] {
   return Array.from(new Set(databases.map((database) => database.name)));
 }
@@ -67,6 +61,9 @@ export function getUniqueSeeds(): string[] {
   return Array.from(new Set(databases.flatMap((database) => database.seeds.map((seed) => seed.specific))));
 }
 
-export function getUniqueSeedsClass(): Seed[] {
-  return Array.from(new Set(databases.flatMap((database) => database.seeds)));
-}
+export type SeedDatabaseDTO = {
+  id: number;
+  name: string;
+  contact: string;
+  seeds: SeedDTO[];
+};

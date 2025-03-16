@@ -3,19 +3,7 @@
 import { columns } from "./components/ui/columns";
 import { DataTable } from "./components/ui/data-table";
 import { useFetchApi } from "@/lib/use-api";
-
-type SeedDTO = {
-  category: string;
-  id: number;
-  specific_name: string;
-};
-
-export type SeedDatabaseDTO = {
-  id: number;
-  name: string;
-  contact: string;
-  seeds: SeedDTO[];
-};
+import { SeedDatabaseDTO } from "@/lib/seed-database";
 
 export default function ViewSeedDatabasePage() {
   const { data: entries, isLoading } = useFetchApi<SeedDatabaseDTO[]>(`http://localhost:8000/seed_databases/seeds`, {
