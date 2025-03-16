@@ -17,7 +17,7 @@ export default function PlantPage({ id }: PlantPageProps) {
   });
 
   return (
-    <div>
+    <div className={"container mx-auto py-8"}>
       <h1>Plant Information</h1>
       <PlantDetails plant={plant} />
       <PlantSurvey />
