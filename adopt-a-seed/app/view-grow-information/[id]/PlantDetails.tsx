@@ -1,6 +1,6 @@
-import { PlantDTO } from "@/app/page";
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PlantDTO } from "@/lib/plant";
 
 export default function PlantDetails({ plant }: { plant: PlantDTO | null }) {
   if (!plant) {

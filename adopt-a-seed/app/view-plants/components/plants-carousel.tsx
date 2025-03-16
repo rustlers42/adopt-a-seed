@@ -2,12 +2,12 @@
 
 import { PlantCard } from "@/components/plant-card";
 import { ScrollBar } from "@/components/ui/scroll-area";
-import { Plant } from "@/lib/plant";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PlantDTO } from "@/app/page";
+
+import { PlantDTO } from "@/lib/plant";
 
 interface PlantsCarouselProps {
   plants: PlantDTO[] | null;

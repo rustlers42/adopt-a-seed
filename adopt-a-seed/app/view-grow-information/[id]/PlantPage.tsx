@@ -3,7 +3,8 @@
 import PlantDetails from "./PlantDetails";
 import PlantSurvey from "./PlantSurvey";
 import { useFetchApi } from "@/lib/use-api";
-import { PlantDTO } from "@/app/page";
+
+import { PlantDTO } from "@/lib/plant";
 
 interface PlantPageProps {
   id: string;

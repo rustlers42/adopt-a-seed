@@ -3,14 +3,7 @@
 import { PlantsCarousel } from "./view-plants/components/plants-carousel";
 import ProtectedRoute from "@/components/protected-route";
 import { useFetchApi } from "@/lib/use-api";
-
-export type PlantDTO = {
-  id: number;
-  seed_category: string;
-  seed_specific: string;
-  current_status: "Returned Seeds";
-  planted_at: string;
-};
+import { PlantDTO } from "@/lib/plant";
 
 export default function Home() {
   const { data: plants, isLoading } = useFetchApi<PlantDTO[]>("http://localhost:8000/plants", {

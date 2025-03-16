@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { SeedDatabase } from "@/lib/seed-database";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { SeedDatabaseDTO } from "@/app/view-seed-database/page";

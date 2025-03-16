@@ -1,7 +1,7 @@
-import { Plant } from "@/lib/plant";
 import { format } from "date-fns";
 import Link from "next/link";
-import { PlantDTO } from "@/app/page";
+
+import { PlantDTO } from "@/lib/plant";
 
 interface PlantCardProps {
   plant: PlantDTO;
