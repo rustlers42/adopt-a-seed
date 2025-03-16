@@ -12,19 +12,7 @@ const EventList: React.FC<EventListProps> = ({ events }) => {
       <div className="space-y-2">
         {events
           ? events.map((event) => <EventEntry key={event.id} event={event} />)
-          : Array.from({ length: 5 }).map((_, index) => (
-              <EventEntry
-                key={index}
-                event={{
-                  user_id: null,
-                  event_type: "Loading...",
-                  event_description: "Loading...",
-                  event_date: "Loading...",
-                  plant_id: null,
-                  id: index,
-                }}
-              />
-            ))}
+          : Array.from({ length: 5 }).map((_, index) => <EventEntry key={index} event={null} />)}
       </div>
     </ScrollArea>
   );
