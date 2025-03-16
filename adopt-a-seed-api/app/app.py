@@ -6,12 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session, SQLModel, select
 
 from .database import engine
-from .models.Plant import Plant
+from .models import Event, Plant, Seed, SeedDatabase, SeedToSeedDatabase, User
+from .models.EventType import EventType
 from .models.PlantStatus import PlantStatus
-from .models.Seed import Seed
-from .models.SeedDatabase import SeedDatabase
-from .models.SeedToSeedDatabase import SeedToSeedDatabase
-from .models.User import User
 from .oauth2_helper import get_password_hash
 from .routers import router as api_router
 
@@ -136,6 +133,53 @@ def create_db_and_tables():
                 ),
             ]
             session.add_all(plants)
+            session.commit()
+
+        if session.exec(select(Event)).first() is None:
+            logging.info("creating default events because there are none")
+            events = [
+                Event(
+                    event_type=EventType.GLOBAL_NEWS,
+                    event_date=date(2025, 1, 1).isoformat(),
+                    event_description="New Year's Day",
+                ),
+                Event(
+                    event_type=EventType.GROWING,
+                    event_date=date(2025, 1, 3).isoformat(),
+                    user_id=1,
+                    plant_id=1,
+                    event_description=f"Changed status from {PlantStatus.PENDING} to {PlantStatus.GERMINATION}",
+                ),
+                Event(
+                    event_type=EventType.GROWING,
+                    event_date=date(2025, 1, 7).isoformat(),
+                    user_id=1,
+                    plant_id=1,
+                    event_description=f"Changed status from {PlantStatus.GERMINATION} to {PlantStatus.SEEDLING}",
+                ),
+                Event(
+                    event_type=EventType.GROWING,
+                    event_date=date(2025, 1, 17).isoformat(),
+                    user_id=1,
+                    plant_id=1,
+                    event_description=f"Changed status from {PlantStatus.SEEDLING} to {PlantStatus.VEGETATIVE_PHASE}",
+                ),
+                Event(
+                    event_type=EventType.GROWING,
+                    event_date=date(2025, 2, 16).isoformat(),
+                    user_id=1,
+                    plant_id=1,
+                    event_description=f"Changed status from {PlantStatus.VEGETATIVE_PHASE} to {PlantStatus.REPRODUCTIVE_PHASE}",
+                ),
+                Event(
+                    event_type=EventType.GROWING,
+                    event_date=date(2025, 3, 15).isoformat(),
+                    user_id=1,
+                    plant_id=1,
+                    event_description=f"Changed status from {PlantStatus.REPRODUCTIVE_PHASE} to {PlantStatus.RETURNED_SEEDS}",
+                ),
+            ]
+            session.add_all(events)
             session.commit()
 
         if session.exec(select(SeedDatabase)).first() is None:

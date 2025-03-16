@@ -3,9 +3,7 @@ from pydantic import BaseModel
 from sqlmodel import Session
 
 from ..database import get_session
-from ..models.Seed import Seed
-from ..models.SeedDatabase import SeedDatabase
-from ..models.SeedToSeedDatabase import SeedToSeedDatabase
+from ..models import Seed, SeedDatabase, SeedToSeedDatabase
 
 router = APIRouter()
 

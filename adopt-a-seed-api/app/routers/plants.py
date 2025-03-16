@@ -3,9 +3,7 @@ from pydantic import BaseModel
 from sqlmodel import Session, select
 
 from ..database import get_session
-from ..models.Plant import Plant
-from ..models.Seed import Seed
-from ..models.User import User
+from ..models import Event, Plant, Seed, User
 from ..oauth2_helper import get_current_user
 
 router = APIRouter()
@@ -121,3 +119,19 @@ async def put_plant(
     session.commit()
     session.refresh(db_plant)
     return db_plant
+
+
+@router.get("/{plant_id}/events", response_model=list[Event])
+async def get_users_me_events(
+    plant_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Get the events of the current user
+    """
+    return session.exec(
+        select(Event)
+        .where(Event.user_id == current_user.id, Event.plant_id == plant_id)
+        .order_by(Event.event_date)
+    ).all()

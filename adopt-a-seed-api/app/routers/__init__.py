@@ -8,6 +8,7 @@ from sqlmodel import Session
 from ..database import get_session
 from ..oauth2_helper import Token, authenticate_user, create_access_token
 from ..settings import settings
+from .events import router as events_router
 from .health import router as health_router
 from .plants import router as plants_router
 from .seed_databases import router as seed_databases_router
@@ -16,6 +17,7 @@ from .users import router as users_router
 
 router = APIRouter()
 router.include_router(health_router, prefix="/health", tags=["health"])
+router.include_router(events_router, prefix="/events")
 router.include_router(plants_router, prefix="/plants")
 router.include_router(seed_databases_router, prefix="/seed_databases")
 router.include_router(seeds_router, prefix="/seeds")

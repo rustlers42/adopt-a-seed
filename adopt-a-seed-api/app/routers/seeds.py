@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session
 
 from ..database import get_session
-from ..models.Seed import Seed
+from ..models import Seed
 
 router = APIRouter()
 
