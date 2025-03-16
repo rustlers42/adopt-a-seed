@@ -466,7 +466,7 @@ async def get_plant_help(
             Plant.planted_at, Seed.category, Seed.specific_name, Plant.current_status
         )
         .where(Plant.id == plant_id)
-        .join(Seed, Seed.id == Plant.id)
+        .join(Seed, Seed.id == Plant.seed_id)
     ).first()
     events = session.exec(
         select(Event)
