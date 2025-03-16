@@ -2,30 +2,30 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
-import { useFetchApi } from "@/lib/use-api";
-import { useAuth } from "@/lib/auth-context";
-import { postData } from "@/lib/api-helpers";
-import type { PlantDTO } from "@/lib/plant";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { postData } from "@/lib/api-helpers";
+import { useAuth } from "@/lib/auth-context";
+import type { PlantDTO } from "@/lib/plant";
+import { useFetchApi } from "@/lib/use-api";
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import {
-  TreesIcon as Plant,
-  Smile,
-  Meh,
+  AlertCircleIcon,
+  CheckCircle2Icon,
   Frown,
   Laugh,
-  Skull,
-  CheckCircle2Icon,
-  AlertCircleIcon,
   Loader2Icon,
+  Meh,
+  TreesIcon as Plant,
+  Skull,
+  Smile,
 } from "lucide-react";
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
-import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import { useRouter } from "next/navigation";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Label } from "@/components/ui/label";
+import { useEffect, useState } from "react";
 
 interface PlantPageProps {
   id: string;
@@ -195,7 +195,7 @@ export default function PlantSurvey({ id }: PlantPageProps) {
           <Plant className="h-5 w-5 text-green-600" />
           Plant Status Survey
         </CardTitle>
-        <CardDescription>Help us track your plant's progress by answering these questions</CardDescription>
+        <CardDescription>Help us track your plant&apos;s progress by answering these questions</CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-6">
