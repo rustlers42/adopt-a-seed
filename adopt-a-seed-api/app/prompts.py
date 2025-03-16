@@ -16,7 +16,7 @@ async def prompt_check_growth_stage_eligibility(content):
             "content": content,
         },
     ]
-    response: ChatResponse = await AsyncClient().chat(
+    response: ChatResponse = await AsyncClient(host=settings.ollama_url).chat(
         model=settings.ollama_model,
         messages=messages,
     )
@@ -36,7 +36,7 @@ async def prompt_provide_growth_recommendations(content):
             "content": content,
         },
     ]
-    response: ChatResponse = await AsyncClient().chat(
+    response: ChatResponse = await AsyncClient(host=settings.ollama_url).chat(
         model=settings.ollama_model,
         messages=messages,
     )
@@ -56,7 +56,7 @@ async def prompt_general_plant_help_messages(content):
             "content": content,
         },
     ]
-    response: ChatResponse = await AsyncClient().chat(
+    response: ChatResponse = await AsyncClient(host=settings.ollama_url).chat(
         model=settings.ollama_model,
         messages=messages,
     )

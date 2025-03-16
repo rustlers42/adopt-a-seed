@@ -12,6 +12,12 @@
 
 - [Ollama](https://ollama.com)
 
+## start everything in a single command
+
+```bash
+docker compose up --build
+```
+
 ## Next steps
 
 - [ ] Implement a management system for seed databases

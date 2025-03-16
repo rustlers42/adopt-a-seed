@@ -1,9 +1,9 @@
 import logging
 from contextlib import asynccontextmanager
 
-import ollama
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from ollama import AsyncClient
 from sqlmodel import Session, SQLModel
 
 from .database import engine
@@ -20,16 +20,16 @@ def create_db_and_tables():
         setup_mock_data(session)
 
 
-def check_ollama_models():
+async def check_ollama_models():
     logging.info("try to pull ollama model")
-    ollama.pull(settings.ollama_model)
+    await AsyncClient(host=settings.ollama_url).pull(settings.ollama_model)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logging.info("lifespan called")
     create_db_and_tables()
-    check_ollama_models()
+    await check_ollama_models()
     yield
     logging.info("lifespan ending")
 
