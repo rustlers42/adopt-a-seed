@@ -13,6 +13,7 @@ class UserResponse(BaseModel):
     email: str
     username: str
     score: int
+    koppen_climate_classification: str
 
 
 class UserScoreResponse(BaseModel):
@@ -42,6 +43,7 @@ async def get_users_me(*, current_user: User = Depends(get_current_user)):
         email=current_user.email,
         username=current_user.username,
         score=current_user.score,
+        koppen_climate_classification=current_user.koppen_climate_classification.name,
     )
 
 

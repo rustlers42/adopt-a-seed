@@ -7,6 +7,7 @@ from sqlmodel import Session, select
 from .models import Event, Plant, Seed, SeedDatabase, SeedToSeedDatabase, User
 from .models.EventType import EventType
 from .models.PlantStatus import PlantStatus
+from .models.KoppenClimateClassification import KoppenClimateClassification
 from .oauth2_helper import get_password_hash
 
 
@@ -19,30 +20,35 @@ def setup_mock_data(session: Session):
                 username="admin",
                 hashed_password=get_password_hash("admin"),
                 score=0,
+                koppen_climate_classification=KoppenClimateClassification.CFA
             ),
             User(
                 email="user@user.de",
                 username="user",
                 hashed_password=get_password_hash("user"),
                 score=500,
+                koppen_climate_classification=KoppenClimateClassification.CFB
             ),
             User(
                 email="alice@example.com",
                 username="alice",
                 hashed_password=get_password_hash("alicepass"),
                 score=150,
+                koppen_climate_classification=KoppenClimateClassification.CSA
             ),
             User(
                 email="bob@example.com",
                 username="bob",
                 hashed_password=get_password_hash("bobpass"),
                 score=320,
+                koppen_climate_classification=KoppenClimateClassification.CSB
             ),
             User(
                 email="carol@example.com",
                 username="carol",
                 hashed_password=get_password_hash("carolpass"),
                 score=480,
+                koppen_climate_classification=KoppenClimateClassification.DFB
             ),
         ]
         session.add_all(user)
