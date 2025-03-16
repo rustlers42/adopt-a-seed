@@ -321,11 +321,28 @@ async def get_plant_status(
         return Response(status_code=status.HTTP_404_NOT_FOUND)
     next_status = plant.current_status.get_next_status()
     question_ids = question_catalog.get(next_status, [])
-    questions_to_answer = [q for q in questions if q.id in question_ids]
+
+    # check if there is already a growing event for the plant today
+    growing_event = session.exec(
+        select(Event).where(
+            Event.user_id == current_user.id,
+            Event.plant_id == plant_id,
+            Event.event_type == EventType.GROWING,
+            Event.event_date == date.today().isoformat(),
+        )
+    ).first()
+    if growing_event:
+        return PlantStatusResponse(
+            current_status=plant.current_status.value,
+            next_status=next_status.value if next_status else None,
+            questions=[],
+            otp_question=None,
+        )
+
     return PlantStatusResponse(
         current_status=plant.current_status.value,
         next_status=next_status.value if next_status else None,
-        questions=questions_to_answer,
+        questions=[q for q in questions if q.id in question_ids],
         otp_question=(
             otp_question if next_status == PlantStatus.RETURNED_SEEDS else None
         ),
