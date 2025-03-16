@@ -346,11 +346,27 @@ async def post_plant_status(
     next_status = current_status.get_next_status()
 
     messages_reccomendation_transition = await prompt_check_growth_stage_eligibility(
-        plant_status, current_user, plant, current_status, next_status
+        f"""
+            planted_at: {plant.planted_at}
+            seed_category: {plant.category}
+            seed_specific: {plant.specific_name}
+            current_status: {current_status}
+            next_status: {next_status}
+            user_koppen_climate_classification: {current_user.koppen_climate_classification}
+            questions: {plant_status.questions}
+        """
     )
 
     messages_telemetry = await prompt_provide_growth_recommendations(
-        plant_status, current_user, plant, current_status, next_status
+        f"""
+            planted_at: {plant.planted_at}
+            seed_category: {plant.category}
+            seed_specific: {plant.specific_name}
+            current_status: {current_status}
+            next_status: {next_status}
+            user_koppen_climate_classification: {current_user.koppen_climate_classification}
+            questions: {plant_status.questions}
+        """
     )
 
     # document telemetry data
@@ -438,7 +454,14 @@ async def get_plant_help(
     ).all()
 
     messages_telemetry = await prompt_general_plant_help_messages(
-        current_user, plant, events
+        f"""
+            planted_at: {plant.planted_at}
+            seed_category: {plant.category}
+            seed_specific: {plant.specific_name}
+            current_status: {plant.current_status}
+            user_koppen_climate_classification: {current_user.koppen_climate_classification}
+            events: {events}
+        """
     )
 
     return PlantStatusHelpResponse(text=messages_telemetry)

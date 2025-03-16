@@ -1,11 +1,11 @@
+from async_lru import alru_cache
 from ollama import AsyncClient, ChatResponse
 
 from .settings import settings
 
 
-async def prompt_check_growth_stage_eligibility(
-    plant_status, current_user, plant, current_status, next_status
-):
+@alru_cache(maxsize=32)
+async def prompt_check_growth_stage_eligibility(content):
     messages = [
         {
             "role": "system",
@@ -13,15 +13,7 @@ async def prompt_check_growth_stage_eligibility(
         },
         {
             "role": "user",
-            "content": f"""
-                    planted_at: {plant.planted_at}
-                    seed_category: {plant.category}
-                    seed_specific: {plant.specific_name}
-                    current_status: {current_status}
-                    next_status: {next_status}
-                    user_koppen_climate_classification: {current_user.koppen_climate_classification}
-                    questions: {plant_status.questions}
-                """,
+            "content": content,
         },
     ]
     response: ChatResponse = await AsyncClient().chat(
@@ -32,9 +24,8 @@ async def prompt_check_growth_stage_eligibility(
     return messages_reccomendation_transition
 
 
-async def prompt_provide_growth_recommendations(
-    plant_status, current_user, plant, current_status, next_status
-):
+@alru_cache(maxsize=32)
+async def prompt_provide_growth_recommendations(content):
     messages = [
         {
             "role": "system",
@@ -42,15 +33,7 @@ async def prompt_provide_growth_recommendations(
         },
         {
             "role": "user",
-            "content": f"""
-                    planted_at: {plant.planted_at}
-                    seed_category: {plant.category}
-                    seed_specific: {plant.specific_name}
-                    current_status: {current_status}
-                    next_status: {next_status}
-                    user_koppen_climate_classification: {current_user.koppen_climate_classification}
-                    questions: {plant_status.questions}
-                """,
+            "content": content,
         },
     ]
     response: ChatResponse = await AsyncClient().chat(
@@ -61,7 +44,8 @@ async def prompt_provide_growth_recommendations(
     return messages_telemetry
 
 
-async def prompt_general_plant_help_messages(current_user, plant, events):
+@alru_cache(maxsize=32)
+async def prompt_general_plant_help_messages(content):
     messages = [
         {
             "role": "system",
@@ -69,14 +53,7 @@ async def prompt_general_plant_help_messages(current_user, plant, events):
         },
         {
             "role": "user",
-            "content": f"""
-                    planted_at: {plant.planted_at}
-                    seed_category: {plant.category}
-                    seed_specific: {plant.specific_name}
-                    current_status: {plant.current_status}
-                    user_koppen_climate_classification: {current_user.koppen_climate_classification}
-                    events: {events}
-                """,
+            "content": content,
         },
     ]
     response: ChatResponse = await AsyncClient().chat(
