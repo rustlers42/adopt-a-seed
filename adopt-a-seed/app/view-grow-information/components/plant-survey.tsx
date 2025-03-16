@@ -121,7 +121,7 @@ export default function PlantSurvey({ id }: PlantPageProps) {
         setSuccess("Status updated successfully!");
 
         setTimeout(() => {
-          router.refresh();
+          location.reload();
         }, 1500);
       }
     } catch (err) {
