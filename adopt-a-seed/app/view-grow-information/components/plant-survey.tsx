@@ -111,7 +111,9 @@ export default function PlantSurvey({ id }: PlantPageProps) {
     }
   };
 
-  if (!status || status.questions.length === 0) return <div>Loading...</div>;
+  if (status && status?.questions.length === 0) return <></>;
+
+  if (!status) return <div>Loading Survey...</div>;
 
   return (
     <div className="border p-4 relative">
