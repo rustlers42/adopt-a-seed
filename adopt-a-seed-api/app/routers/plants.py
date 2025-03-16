@@ -1,7 +1,8 @@
 import enum
+import logging
 from datetime import date
 
-from fastapi import APIRouter, Depends, Response, status
+from fastapi import APIRouter, Depends, Response
 from ollama import ChatResponse, chat
 from pydantic import BaseModel
 from sqlmodel import Session, select, update
@@ -369,7 +370,7 @@ async def post_plant_status(
     messages = [
         {
             "role": "system",
-            "content": "You are an assistant providing practical advice for plant growers. You will receive a series of questions along with numerical ratings describing the current health status of a plant. Ratings are given as follows: 1: Very Good, 2: Good, 3: Neutral, 4: Bad, 5: Very Bad Based on these ratings, compile the most important key points highlighting areas for improvement. Provide general, actionable hints on how the user can enhance plant health or address issues indicated by lower ratings. Do not provide overly specific instructions, and do not ask any follow-up questions.",
+            "content": "You are an assistant providing practical advice for plant growers. You will receive a series of questions along with numerical ratings describing the current health status of a plant. Ratings are given as follows: 1: Very Good, 2: Good, 3: Neutral, 4: Bad, 5: Very Bad Based on these ratings, compile the most important key points highlighting areas for improvement. Provide general, actionable hints on how the user can enhance plant health or address issues indicated by lower ratings. Do not provide overly specific instructions, and do not ask any follow-up questions. Its also very important to only respond in plain unformatted block text.",
         },
         {
             "role": "user",
@@ -477,7 +478,7 @@ async def get_plant_help(
     messages = [
         {
             "role": "system",
-            "content": "You are an expert assistant providing advice on plant cultivation. You will receive a chronological list of events related to a plant's growth process. Based on this event history, your about the plant and the climate based on the koppen_climate_classification provide concise, actionable recommendations highlighting areas for potential improvement. Offer general suggestions. Do not ask any follow-up questions.",
+            "content": "You are an expert assistant providing advice on plant cultivation. You will receive a chronological list of events related to a plant's growth process. Based on this event history, your about the plant and the climate based on the koppen_climate_classification provide concise, actionable recommendations highlighting areas for potential improvement. Offer general suggestions. Do not ask any follow-up questions. Its also very important to only respond in plain unformatted block text.",
         },
         {
             "role": "user",
