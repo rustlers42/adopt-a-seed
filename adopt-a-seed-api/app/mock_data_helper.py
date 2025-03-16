@@ -6,8 +6,8 @@ from sqlmodel import Session, select
 
 from .models import Event, Plant, Seed, SeedDatabase, SeedToSeedDatabase, User
 from .models.EventType import EventType
-from .models.PlantStatus import PlantStatus
 from .models.KoppenClimateClassification import KoppenClimateClassification
+from .models.PlantStatus import PlantStatus
 from .oauth2_helper import get_password_hash
 
 
@@ -20,35 +20,35 @@ def setup_mock_data(session: Session):
                 username="admin",
                 hashed_password=get_password_hash("admin"),
                 score=0,
-                koppen_climate_classification=KoppenClimateClassification.CFA
+                koppen_climate_classification=KoppenClimateClassification.CFA,
             ),
             User(
                 email="user@user.de",
                 username="user",
                 hashed_password=get_password_hash("user"),
                 score=500,
-                koppen_climate_classification=KoppenClimateClassification.CFB
+                koppen_climate_classification=KoppenClimateClassification.CFB,
             ),
             User(
                 email="alice@example.com",
                 username="alice",
                 hashed_password=get_password_hash("alicepass"),
                 score=150,
-                koppen_climate_classification=KoppenClimateClassification.CSA
+                koppen_climate_classification=KoppenClimateClassification.CSA,
             ),
             User(
                 email="bob@example.com",
                 username="bob",
                 hashed_password=get_password_hash("bobpass"),
                 score=320,
-                koppen_climate_classification=KoppenClimateClassification.CSB
+                koppen_climate_classification=KoppenClimateClassification.CSB,
             ),
             User(
                 email="carol@example.com",
                 username="carol",
                 hashed_password=get_password_hash("carolpass"),
                 score=480,
-                koppen_climate_classification=KoppenClimateClassification.DFB
+                koppen_climate_classification=KoppenClimateClassification.DFB,
             ),
         ]
         session.add_all(user)
@@ -422,7 +422,7 @@ def setup_mock_data(session: Session):
                 random_statuses = random.sample(plant_statuses, 5)
 
                 for seed, status in zip(selected_seeds, random_statuses):
-                    planting_base_date = date(2024, 12, random.randint(1, 31))
+                    planting_base_date = date(2024, 11, random.randint(1, 30))
                     planted_at = (
                         None
                         if status == PlantStatus.PENDING
