@@ -2,6 +2,16 @@
 
 ## start the backend
 
+firstly you need to create a .env file
+
+```
+DATABASE_URL="<changeme>"
+SECRET_KEY="<changeme>"
+ALGORITHM="<changeme>"
+ACCESS_TOKEN_EXPIRE_MINUTES=<changeme>
+OLLAMA_MODEL="<changeme>"
+```
+
 ```bash
 uv run main.py
 ```

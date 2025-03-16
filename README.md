@@ -7,3 +7,7 @@
 # Backend
 
 [Backend README](./adopt-a-seed-api/README.md)
+
+# Additional services
+
+- [Ollama](https://ollama.com)
