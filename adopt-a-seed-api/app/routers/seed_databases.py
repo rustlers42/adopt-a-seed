@@ -1,6 +1,8 @@
+from typing import Any, List
+
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from ..database import get_session
 from ..models import Seed, SeedDatabase, SeedToSeedDatabase
@@ -20,7 +22,7 @@ async def get_seed_databases(*, session: Session = Depends(get_session)):
     """
     Get all seeds databases
     """
-    return session.query(SeedDatabase).all()
+    return session.exec(select(SeedDatabase)).all()
 
 
 @router.get("/seeds")
@@ -28,15 +30,14 @@ async def get_seed_databases_with_seeds(*, session: Session = Depends(get_sessio
     """
     Get all seeds for all seed databases
     """
-    seed_databases = session.query(SeedDatabase).all()
+    seed_databases = session.exec(select(SeedDatabase)).all()
     seed_database_with_seeds = []
     for seed_database in seed_databases:
-        seeds = (
-            session.query(Seed)
+        seeds: List[Any] = session.exec(
+            select(Seed)
             .join(SeedToSeedDatabase)
             .filter(SeedToSeedDatabase.seed_database_id == seed_database.id)
-            .all()
-        )
+        ).all()
         seed_database_with_seeds.append(
             SeedDatabaseWithSeeds(
                 id=seed_database.id,
