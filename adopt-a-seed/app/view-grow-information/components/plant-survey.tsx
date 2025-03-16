@@ -1,15 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useState, useEffect } from "react";
 import { useFetchApi } from "@/lib/use-api";
 import { useAuth } from "@/lib/auth-context";
 import { postData } from "@/lib/api-helpers";
 import { PlantDTO } from "@/lib/plant";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { TreesIcon as Plant } from "lucide-react";
+import { TreesIcon as Plant, Smile, Meh, Frown, Laugh, Skull } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 interface PlantPageProps {
   id: string;
@@ -30,7 +29,7 @@ type PlantStatusDTO = {
 
 export default function PlantSurvey({ id }: PlantPageProps) {
   const { getToken } = useAuth();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -40,7 +39,6 @@ export default function PlantSurvey({ id }: PlantPageProps) {
   });
 
   const [answers, setAnswers] = useState<{ [key: number]: string }>({});
-  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     if (status) {
@@ -48,7 +46,7 @@ export default function PlantSurvey({ id }: PlantPageProps) {
     }
   }, [status]);
 
-  const extractAnswers = (status: PlantStatusDTO) => {
+  const extractAnswers = (status: PlantStatusDTO): { [key: number]: string } => {
     return status.questions.reduce(
       (acc, q) => {
         if (q.answer) acc[q.id] = q.answer;
@@ -58,7 +56,7 @@ export default function PlantSurvey({ id }: PlantPageProps) {
     );
   };
 
-  const handleAnswerChange = (questionId: number, value: string) => {
+  const handleAnswerChange = (questionId: number, value: string): void => {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
   };
 
@@ -73,8 +71,7 @@ export default function PlantSurvey({ id }: PlantPageProps) {
     };
   };
 
-  const handleSubmit = async () => {
-    // Reset states
+  const handleSubmit = async (): Promise<void> => {
     setError(null);
     setSuccess(null);
 
@@ -83,10 +80,8 @@ export default function PlantSurvey({ id }: PlantPageProps) {
     setIsSubmitting(true);
 
     try {
-      // Get auth token
       const token = getToken();
 
-      // Make POST request using our helper
       const result = await postData<PlantDTO>(
         `http://localhost:8000/plants/${id}/status`,
         submissionData,
@@ -108,10 +103,14 @@ export default function PlantSurvey({ id }: PlantPageProps) {
 
   if (!status || status.questions.length === 0) return <div>Loading...</div>;
 
-  const currentQuestion = status.questions[activeIndex];
-
   return (
-    <div className="border p-4">
+    <div className="border p-4 relative">
+      {isSubmitting && (
+        <div className="absolute inset-0 flex justify-center items-center z-10 bg-black/30">
+          <Spinner /> {/* Spinner component */}
+        </div>
+      )}
+
       {error && (
         <Alert variant="destructive">
           <AlertTitle>Error</AlertTitle>
@@ -126,28 +125,50 @@ export default function PlantSurvey({ id }: PlantPageProps) {
           <AlertDescription>{success}</AlertDescription>
         </Alert>
       )}
-      <h2>{currentQuestion.question}</h2>
-      <RadioGroup
-        value={answers[currentQuestion.id] || ""}
-        onValueChange={(value) => handleAnswerChange(currentQuestion.id, value)}
-      >
-        {["Yes", "No"].map((answer) => (
-          <div key={answer} className="flex items-center space-x-2">
-            <RadioGroupItem value={answer} id={`q${currentQuestion.id}-${answer}`} />
-            <Label htmlFor={`q${currentQuestion.id}-${answer}`}>{answer}</Label>
+
+      {status.questions.map((question) => (
+        <div key={question.id} className="mb-4">
+          <h2>{question.question}</h2>
+          <div className="flex space-x-4">
+            {["1", "2", "3", "4", "5"].map((value) => {
+              const Icon = getIconForValue(value); // Get corresponding icon for value
+              return (
+                <div
+                  key={value}
+                  className={`cursor-pointer ${answers[question.id] === value ? "text-blue-600" : ""}`}
+                  onClick={() => handleAnswerChange(question.id, value)}
+                >
+                  <Icon className="h-8 w-8" />
+                </div>
+              );
+            })}
           </div>
-        ))}
-      </RadioGroup>
+        </div>
+      ))}
+
       <div className="flex space-x-2 mt-4">
-        {activeIndex > 0 && <Button onClick={() => setActiveIndex((prev) => prev - 1)}>Previous</Button>}
-        {activeIndex < status.questions.length - 1 ? (
-          <Button onClick={() => setActiveIndex((prev) => prev + 1)}>Next</Button>
-        ) : (
-          <Button onClick={handleSubmit} className="bg-green-500 text-white">
-            Submit
-          </Button>
-        )}
+        <Button onClick={handleSubmit} className="bg-green-500 text-white" disabled={isSubmitting}>
+          Submit
+        </Button>
       </div>
     </div>
   );
 }
+
+// Helper function to return the corresponding icon for each value
+const getIconForValue = (value: string) => {
+  switch (value) {
+    case "1":
+      return Laugh; // Very Happy
+    case "2":
+      return Smile; // Happy
+    case "3":
+      return Meh; // Neutral
+    case "4":
+      return Frown; // Meh (Unhappy)
+    case "5":
+      return Skull; // Unhappy (Worst)
+    default:
+      return Smile;
+  }
+};
