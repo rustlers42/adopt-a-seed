@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LogOut, SproutIcon as Seedling, User } from "lucide-react";
+import { LogOut, SproutIcon, SproutIcon as Seedling, User } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { useFetchApi } from "@/lib/use-api";
 
@@ -35,14 +35,14 @@ export default function Header() {
     <header className="border-b">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <Seedling className="h-6 w-6" />
+          <SproutIcon className="h-6 w-6  text-green-600" />
           <h1 className="text-2xl font-bold">adopt-a-seed</h1>
         </Link>
 
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <Link href="/" legacyBehavior passHref>
+              <Link href="/dashboard" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>Home</NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
@@ -67,15 +67,13 @@ export default function Header() {
               ) : (
                 <span className="font-medium">{userProfile?.score || 0}</span>
               ))}
-            {isAuthenticated && <Seedling className="h-5 w-5" aria-hidden="true" />}
+            {isAuthenticated && <SproutIcon className="h-5 w-5" aria-hidden="true" />}
           </div>
 
           {isAuthenticated ? (
             <div className="flex items-center gap-2">
-              <Link href="/profile" className="flex items-center gap-1 text-sm">
-                <User className="h-4 w-4" />
-                <span>{user?.username}</span>
-              </Link>
+              <User className="h-4 w-4" />
+              <span>{user?.username}</span>
               <Button variant="ghost" size="icon" onClick={logout} aria-label="Logout">
                 <LogOut className="h-4 w-4" />
               </Button>
