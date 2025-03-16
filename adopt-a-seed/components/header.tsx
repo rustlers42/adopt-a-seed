@@ -43,7 +43,7 @@ export default function Header() {
           <NavigationMenuList>
             <NavigationMenuItem>
               <Link href="/dashboard" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Home</NavigationMenuLink>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Dashboard</NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
