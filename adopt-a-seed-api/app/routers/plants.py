@@ -177,7 +177,6 @@ async def get_plants(
         .join(SeedDatabase, Plant.seed_database_id == SeedDatabase.id, isouter=True)
         .order_by(order_by_clause)
     ).all()
-    print(plants)
     return [
         PlantResponse(
             id=plant.id,
@@ -308,7 +307,7 @@ async def post_plant_status(
     plant_id: int,
     session: Session = Depends(get_session),
     current_user: User = Depends(get_current_user),
-):
+) -> Response:
     """
     Update the status of the plant for that firstly check the questions and answers for the transition to the next status. When certain criterias are met transition the plant to the next status and also create an event for that.
     """
@@ -326,7 +325,7 @@ async def post_plant_status(
     messages = [
         {
             "role": "system",
-            "content": "You are an assistant giving advive to people who are growing plants. You receive a list of questions and answers about the plant's current status. You need to determine if the plant is ready to transition to the next growth stage. Possible answers are: VeryGood, Good, Neutral, Bad, VeryBad. Repressent them with numbers 1, 2, 3, 4, 5 respectively. Just answer with yes or no.",
+            "content": "You are an expert assistant providing advice on plant growth. You will be given a set of questions along with corresponding ratings that reflect the current health and status of a plant. Ratings are provided numerically as follows: 1: Very Good, 2: Good, 3: Neutral, 4: Bad, 5: Very Bad Based on these ratings, determine if the plant is ready to transition to the next growth stage. Respond strictly with 'yes' if the plant is ready, or 'No' if it is not. Do not provide additional explanations or commentary.",
         },
         {
             "role": "user",
@@ -349,7 +348,7 @@ async def post_plant_status(
     messages = [
         {
             "role": "system",
-            "content": "You are an assistant giving advive to people who are growing plants. You receive a list of questions and answers about the plant's current status. You need to give advice to the user about he can improve based on the question he answered. Possible answers are: VeryGood, Good, Neutral, Bad, VeryBad. Repressent them with numbers 1, 2, 3, 4, 5 respectively. Compile the most important key points. Give hints about how to improve but dont be too specific. And also dont ask further questions.",
+            "content": "You are an assistant providing practical advice for plant growers. You will receive a series of questions along with numerical ratings describing the current health status of a plant. Ratings are given as follows: 1: Very Good, 2: Good, 3: Neutral, 4: Bad, 5: Very Bad Based on these ratings, compile the most important key points highlighting areas for improvement. Provide general, actionable hints on how the user can enhance plant health or address issues indicated by lower ratings. Do not provide overly specific instructions, and do not ask any follow-up questions.",
         },
         {
             "role": "user",
@@ -427,7 +426,7 @@ async def get_plant_help(
     messages = [
         {
             "role": "system",
-            "content": "You are an assistant giving advive to people who are growing plants. You receive a list of events regarding the growth process of the plant. You need to give advice to the user about he can improve based on the history. And also dont ask further questions.",
+            "content": "You are an expert assistant providing advice on plant cultivation. You will receive a chronological list of events related to a plant's growth process. Based on this event history, provide concise, actionable recommendations highlighting areas for potential improvement. Offer general suggestions without overly detailed or specific instructions. Do not ask any follow-up questions.",
         },
         {
             "role": "user",
