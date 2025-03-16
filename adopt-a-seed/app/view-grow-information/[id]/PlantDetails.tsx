@@ -20,6 +20,7 @@ export default function PlantDetails({ plant }: { plant: PlantDTO | null }) {
       <p>Category: {plant.seed_category}</p>
       <p>Specific: {plant.seed_specific}</p>
       <p>Planted At: {format(new Date(plant.planted_at), "PPP")}</p>
+      <p>Current Status: {plant.current_status}</p>
     </div>
   );
 }
